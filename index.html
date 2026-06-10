@@ -7,45 +7,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#070D18;
-  --deep:#0F1824;
-  --slate:#1C2B3A;
-  --mid:#2A3F56;
-  --silver:#6B7E94;
-  --mist:#A8B8C8;
-  --rule:#D8E2EC;
-  --paper:#F4F7FA;
-  --white:#FFFFFF;
-  --blue:#0A4FC4;
-  --blue-lt:#EBF1FC;
-  --blue-mid:#3D72D4;
-  --green:#21A362;
-  --red:#B83232;
-  --amber:#C4860A;
+  --ink:#070D18;--deep:#0F1824;--slate:#1C2B3A;--mid:#2A3F56;
+  --silver:#6B7E94;--mist:#A8B8C8;--rule:#D8E2EC;--paper:#F4F7FA;--white:#FFFFFF;
+  --blue:#0A4FC4;--blue-lt:#EBF1FC;--blue-mid:#3D72D4;
+  --green:#21A362;--red:#B83232;--amber:#C4860A;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'Barlow',sans-serif;background:var(--ink);color:var(--white);min-height:100vh;}
 
-/* ─── INTAKE ─── */
-#intake{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem;}
-.logo{display:flex;align-items:center;gap:9px;margin-bottom:2rem;}
-.logo-mark{width:26px;height:26px;position:relative;}
-.logo-mark svg{width:26px;height:26px;}
-.logo-word{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--white);}
-.logo-word sup{font-size:10px;letter-spacing:1px;color:var(--blue);vertical-align:super;}
+/* ── SHARED CARD / FORM ── */
+.screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1rem;}
+.logo{display:flex;align-items:center;gap:9px;margin-bottom:1.75rem;}
+.logo-mark svg{width:24px;height:24px;}
+.logo-word{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;}
+.logo-word sup{font-size:9px;letter-spacing:1px;color:var(--blue);vertical-align:super;}
 .eyebrow{font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--silver);margin-bottom:.35rem;text-align:center;}
-.intake-head{font-family:'Barlow Condensed',sans-serif;font-size:clamp(22px,3.8vw,38px);font-weight:700;text-transform:uppercase;text-align:center;line-height:1.05;margin-bottom:.5rem;max-width:520px;}
-.intake-head em{color:var(--blue);font-style:normal;}
-.intake-sub{font-size:12px;color:var(--silver);text-align:center;max-width:380px;line-height:1.65;margin-bottom:2.25rem;}
-.card{background:#0E1826;border:1px solid #1A2D42;width:100%;max-width:620px;padding:1.6rem;}
+.screen-head{font-family:'Barlow Condensed',sans-serif;font-size:clamp(20px,3.5vw,36px);font-weight:700;text-transform:uppercase;text-align:center;line-height:1.05;margin-bottom:.5rem;max-width:520px;}
+.screen-head em{color:var(--blue);font-style:normal;}
+.screen-sub{font-size:12px;color:var(--silver);text-align:center;max-width:380px;line-height:1.65;margin-bottom:2rem;}
+.card{background:#0E1826;border:1px solid #1A2D42;width:100%;max-width:640px;padding:1.6rem;}
+.card-wide{max-width:780px;}
 label{display:block;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--silver);margin-bottom:.4rem;}
-label .opt{color:#1E3048;font-weight:400;text-transform:none;letter-spacing:0;font-size:9px;}
-textarea,input[type=text],input[type=email],input[type=url]{width:100%;background:var(--ink);border:1px solid #1A2D42;color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;padding:.55rem .7rem;transition:border-color .2s;border-radius:0;}
-textarea{min-height:150px;resize:vertical;line-height:1.65;}
+label .opt{color:#1E3048;font-weight:400;text-transform:none;letter-spacing:0;}
+textarea,input[type=text],input[type=email],input[type=url]{width:100%;background:var(--ink);border:1px solid #1A2D42;color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;padding:.55rem .7rem;transition:border-color .2s;}
+textarea{min-height:140px;resize:vertical;line-height:1.65;}
 textarea:focus,input:focus{outline:none;border-color:var(--blue);}
 textarea::placeholder,input::placeholder{color:#1E3048;}
-.upload-zone{border:1px dashed #1A2D42;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all .2s;margin-top:0;}
+.upload-zone{border:1px dashed #1A2D42;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all .2s;}
 .upload-zone:hover,.upload-zone.drag{border-color:var(--blue);background:rgba(10,79,196,.04);}
 .up-icon{font-size:22px;color:var(--silver);margin-bottom:.35rem;}
 .up-txt{font-size:11px;color:var(--silver);line-height:1.5;}
@@ -59,23 +48,38 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
 .link-row{display:grid;grid-template-columns:82px 1fr 1fr auto;gap:4px;margin-bottom:4px;align-items:center;}
 .link-row select{background:var(--ink);border:1px solid #1A2D42;color:var(--silver);font-family:'Barlow',sans-serif;font-size:11px;padding:.45rem .35rem;}
 .link-row select:focus{outline:none;border-color:var(--blue);}
-.link-del{background:transparent;border:1px solid #1A2D42;color:var(--silver);font-size:13px;padding:.38rem .52rem;cursor:pointer;transition:all .15s;}
+.link-del{background:transparent;border:1px solid #1A2D42;color:var(--silver);font-size:13px;padding:.38rem .52rem;cursor:pointer;}
 .link-del:hover{border-color:var(--red);color:var(--red);}
 .links-mt{font-size:10px;color:#1E3048;padding:.35rem 0;}
-.gen-btn{width:100%;margin-top:1.4rem;background:var(--blue);border:none;color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:.9rem;cursor:pointer;transition:background .2s;}
-.gen-btn:hover{background:#083D9A;}
+.pri-btn{width:100%;margin-top:1.4rem;background:var(--blue);border:none;color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:.9rem;cursor:pointer;transition:background .2s;}
+.pri-btn:hover{background:#083D9A;}
+.sec-btn{background:transparent;border:1px solid #1A2D42;color:var(--silver);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.55rem 1.2rem;cursor:pointer;transition:all .15s;margin-top:.75rem;}
+.sec-btn:hover{border-color:var(--blue);color:var(--blue);}
 .err{font-size:11px;color:#E05050;margin-top:.55rem;display:none;}
 
-/* ─── LOADING ─── */
+/* ── LOADING ── */
 #loading{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:1.1rem;background:var(--ink);}
-.ld-mark{width:20px;height:20px;background:var(--blue);animation:blink .85s ease-in-out infinite;}
-@keyframes blink{0%,100%{opacity:1;transform:rotate(45deg) scale(1);}50%{opacity:.3;transform:rotate(45deg) scale(.65);}}
+.ld-mark{width:18px;height:18px;background:var(--blue);animation:spin .9s ease-in-out infinite;}
+@keyframes spin{0%,100%{opacity:1;transform:rotate(45deg) scale(1);}50%{opacity:.3;transform:rotate(45deg) scale(.6);}}
 .ld-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;}
-.ld-status{font-size:11px;color:var(--silver);}
+.ld-status{font-size:11px;color:var(--silver);min-height:1.2em;text-align:center;max-width:280px;}
 .prog-track{width:180px;height:1px;background:#1A2D42;}
 .prog-bar{height:100%;background:var(--blue);width:0%;transition:width .45s ease;}
 
-/* ─── PROPOSAL ─── */
+/* ── QUESTIONS SCREEN ── */
+#questions{display:none;}
+.q-intro{font-size:12px;color:var(--silver);margin-bottom:1.5rem;line-height:1.65;}
+.q-item{margin-bottom:1.25rem;}
+.q-text{font-size:13px;color:var(--white);line-height:1.6;margin-bottom:.5rem;font-weight:500;}
+.q-text strong{color:var(--blue);}
+.q-why{font-size:10px;color:var(--silver);margin-bottom:.5rem;font-style:italic;}
+.q-actions{display:flex;gap:.6rem;margin-top:.75rem;flex-wrap:wrap;}
+.skip-btn{background:transparent;border:1px solid #1A2D42;color:var(--silver);font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;cursor:pointer;}
+.skip-btn:hover{border-color:var(--silver);}
+.q-divider{width:100%;height:1px;background:#1A2D42;margin:1.25rem 0;}
+.q-progress{font-size:9px;color:var(--silver);margin-bottom:1rem;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;}
+
+/* ── PROPOSAL ── */
 #proposal{display:none;background:var(--white);color:var(--ink);}
 
 /* NAV */
@@ -85,26 +89,59 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
 .pnav-back{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:transparent;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.45);padding:3px 7px;cursor:pointer;transition:all .15s;}
 .pnav-back:hover{color:var(--white);border-color:rgba(255,255,255,.6);}
 .pnav-logo{display:flex;align-items:center;gap:7px;}
-.pnav-mark{width:18px;height:18px;}
-.pnav-mark svg{width:18px;height:18px;}
+.pnav-logo svg{width:16px;height:16px;}
 .pnav-word{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--white);}
 .pnav-word sup{font-size:8px;color:var(--blue);letter-spacing:1px;}
 .pnav-links{display:flex;gap:1.1rem;}
 .pnav-link{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;border-bottom:2px solid transparent;padding-bottom:1px;transition:color .15s;}
 .pnav-link:hover,.pnav-link.on{color:rgba(255,255,255,.9);}
 .pnav-link.on{border-bottom-color:var(--blue);}
-.pnav-actions{display:flex;gap:.5rem;}
+.pnav-actions{display:flex;gap:.5rem;align-items:center;}
 .pnav-btn{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border:1px solid rgba(255,255,255,.22);background:transparent;color:rgba(255,255,255,.85);padding:.28rem .7rem;cursor:pointer;transition:all .15s;}
 .pnav-btn:hover{background:rgba(255,255,255,.07);}
 .pnav-btn.pri{background:var(--blue);border-color:var(--blue);color:var(--white);}
 .pnav-btn.pri:hover{background:#083D9A;}
+.pnav-btn.share{background:rgba(33,163,98,.15);border-color:var(--green);color:var(--green);}
+.pnav-btn.share:hover{background:rgba(33,163,98,.25);}
 .hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:3px;}
 .hamburger span{width:18px;height:1.5px;background:rgba(255,255,255,.7);}
 .mob-nav{display:none;position:fixed;top:52px;left:0;right:0;background:var(--slate);z-index:999;padding:.65rem 1.5rem;flex-direction:column;gap:.5rem;border-top:1px solid rgba(255,255,255,.05);}
 .mob-nav.open{display:flex;}
 .mob-nav a{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.6);text-decoration:none;padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
 
-/* SECTIONS */
+/* SHARE TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--slate);border:1px solid var(--green);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:.5rem 1.25rem;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+
+/* BLIND SPOT PANEL */
+.blindspot-panel{background:var(--ink);border:1px solid #1A2D42;margin:1.5rem 0;overflow:hidden;}
+.blindspot-hdr{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;cursor:pointer;user-select:none;}
+.blindspot-hdr-left{display:flex;align-items:center;gap:.6rem;}
+.blindspot-icon{width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+.blindspot-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);}
+.blindspot-count{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;background:rgba(196,134,10,.15);color:var(--amber);padding:1px 6px;letter-spacing:1px;}
+.blindspot-toggle{font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--silver);letter-spacing:1px;}
+.blindspot-body{padding:0 1rem 1rem;display:none;}
+.blindspot-body.open{display:block;}
+.bs-item{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 0;border-bottom:1px solid #1A2D42;font-size:12px;color:var(--mist);line-height:1.55;}
+.bs-item:last-child{border-bottom:none;}
+.bs-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.bs-dot.warn{background:var(--amber);}
+.bs-dot.info{background:var(--blue-mid);}
+.bs-dot.crit{background:var(--red);}
+.bs-label{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+.bs-label.warn{color:var(--amber);}
+.bs-label.info{color:var(--blue-mid);}
+.bs-label.crit{color:var(--red);}
+
+/* INLINE EDIT */
+[contenteditable]{outline:none;transition:background .15s;}
+[contenteditable]:hover{background:rgba(10,79,196,.04);}
+[contenteditable]:focus{background:rgba(10,79,196,.07);outline:1px solid rgba(10,79,196,.3);}
+.edit-hint{font-size:9px;color:var(--silver);text-align:right;margin-top:.35rem;font-style:italic;display:none;}
+.edit-hint.show{display:block;}
+
+/* PROPOSAL SECTIONS */
 .ps{padding:5.5rem 2rem 4.5rem;max-width:1040px;margin:0 auto;opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;}
 .ps.vis{opacity:1;transform:translateY(0);}
 .ex-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--silver);display:flex;align-items:center;gap:.55rem;margin-bottom:.85rem;}
@@ -115,6 +152,9 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
 .ps-body strong{color:var(--slate);font-weight:600;}
 .hrule{width:100%;height:1px;background:var(--rule);}
 
+/* PRINT COVER */
+#print-cover{display:none;}
+
 /* HERO */
 #ph{padding:0;max-width:100%;background:var(--slate);min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;}
 .ph-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(10,79,196,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(10,79,196,.04) 1px,transparent 1px);background-size:48px 48px;}
@@ -122,19 +162,28 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
 .ph-inner{position:relative;padding:5rem 3rem 4rem;max-width:1040px;margin:0 auto;width:100%;}
 .ph-conf{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--green);border:1px solid rgba(33,163,98,.4);padding:2px 8px;display:inline-block;margin-bottom:1.4rem;}
 .ph-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(30px,5.2vw,58px);font-weight:700;text-transform:uppercase;color:var(--white);line-height:.97;margin-bottom:1.4rem;max-width:820px;}
-.ph-title em{color:var(--blue);font-style:normal;}
 .ph-sub{font-size:13px;color:rgba(255,255,255,.45);max-width:480px;line-height:1.7;margin-bottom:2.5rem;}
 .ph-meta{display:flex;gap:2.25rem;flex-wrap:wrap;}
 .mi{display:flex;flex-direction:column;gap:2px;}
 .mi-l{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--silver);font-family:'Barlow Condensed',sans-serif;}
 .mi-v{font-size:13px;font-weight:500;color:var(--white);}
 
-/* STAT BLOCKS with counter animation */
+/* STATS */
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:2.5rem 0;}
 .stat-block{background:var(--white);padding:1.4rem 1.2rem;}
 .stat-num{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:700;color:var(--blue);line-height:1;margin-bottom:3px;}
 .stat-lbl{font-size:9px;color:var(--silver);line-height:1.4;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
 .stat-ctx{font-size:9px;color:var(--blue);margin-top:3px;font-weight:600;line-height:1.35;}
+
+/* COMP TABLE */
+.comp-table{width:100%;border-collapse:collapse;font-size:12px;margin:1.75rem 0;}
+.comp-table th{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.7rem 1rem;text-align:left;border-bottom:2px solid var(--rule);color:var(--silver);}
+.comp-table td{padding:.65rem 1rem;border-bottom:1px solid var(--rule);color:#374D64;vertical-align:middle;}
+.comp-table tr:last-child td{border-bottom:none;}
+.comp-table tr:hover td{background:var(--paper);}
+.comp-table td:first-child{font-weight:600;color:var(--slate);font-size:11px;}
+.comp-highlight{background:rgba(10,79,196,.06)!important;font-weight:600;color:var(--blue)!important;}
+.comp-note{font-size:10px;color:var(--silver);margin-top:.5rem;font-style:italic;}
 
 /* PULL QUOTE */
 .pull{border-left:3px solid var(--blue);padding:1.1rem 1.35rem;background:var(--blue-lt);margin:1.75rem 0;}
@@ -152,24 +201,22 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
 .ff-dot.push{background:var(--blue);}
 .ff-dot.pull{background:var(--red);}
 
-/* MARKET CHART */
+/* BAR CHART */
+.chart-area{overflow-x:auto;margin:1.75rem 0;}
 .chart-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--silver);margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem;}
 .chart-lbl::before{content:'';display:inline-block;width:10px;height:1px;background:var(--blue);}
-.chart-area{overflow-x:auto;margin:1.75rem 0;}
 
-/* MATRIX TABLE — competitive landscape */
+/* MATRIX TABLE */
 .matrix-wrap{overflow-x:auto;margin:1.75rem 0;}
 .matrix{width:100%;border-collapse:collapse;font-size:12px;}
-.matrix th{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.75rem 1rem;text-align:left;border-bottom:2px solid var(--rule);color:var(--silver);white-space:nowrap;}
-.matrix th:first-child{color:var(--slate);}
-.matrix td{padding:.7rem 1rem;border-bottom:1px solid var(--rule);vertical-align:middle;color:#374D64;line-height:1.4;}
-.matrix td:first-child{font-weight:600;color:var(--slate);font-size:11px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+.matrix th{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.7rem 1rem;text-align:left;border-bottom:2px solid var(--rule);color:var(--silver);white-space:nowrap;}
+.matrix td{padding:.65rem 1rem;border-bottom:1px solid var(--rule);vertical-align:middle;color:#374D64;}
+.matrix td:first-child{font-weight:600;color:var(--slate);font-size:11px;white-space:nowrap;}
 .matrix tr:last-child td{border-bottom:none;}
 .matrix tr:hover td{background:var(--paper);}
-.dot-green{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);}
-.dot-amber{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber);}
-.dot-red{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);}
-.dot-mist{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mist);}
+.dot-g{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:3px;vertical-align:middle;}
+.dot-a{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);margin-right:3px;vertical-align:middle;}
+.dot-r{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:3px;vertical-align:middle;}
 
 /* RADAR */
 .radar-wrap{display:flex;align-items:center;gap:2.5rem;flex-wrap:wrap;margin:1.75rem 0;}
@@ -177,20 +224,20 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
 .leg-row{display:flex;align-items:flex-start;gap:.55rem;font-size:11px;color:#374D64;line-height:1.45;}
 .leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:2px;}
 
-/* RISK CARDS */
+/* RISK */
 .risk-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.75rem 0;}
 .risk-card{background:var(--white);padding:1.5rem;}
 .risk-card.wrong{border-top:2px solid var(--red);}
-.risk-card.right{border-top:2px solid var(--green);grid-column:span 1;}
+.risk-card.right{border-top:2px solid var(--green);}
 .risk-tag{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:2px 6px;display:inline-block;margin-bottom:.6rem;}
-.rt-wrong{background:#FBF0F0;color:var(--red);}
-.rt-right{background:#EBF8F2;color:var(--green);}
+.rt-w{background:#FBF0F0;color:var(--red);}
+.rt-r{background:#EBF8F2;color:var(--green);}
 .risk-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;color:var(--slate);margin-bottom:.4rem;}
 .risk-body{font-size:12px;color:#374D64;line-height:1.6;}
 .risk-sigs{margin-top:.8rem;}
-.risk-sig-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--silver);margin-bottom:.3rem;}
-.risk-sig{font-size:11px;color:#374D64;padding:.2rem 0;border-bottom:1px solid var(--rule);line-height:1.4;}
-.risk-sig:last-child{border-bottom:none;}
+.rs-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--silver);margin-bottom:.3rem;}
+.rs-sig{font-size:11px;color:#374D64;padding:.2rem 0;border-bottom:1px solid var(--rule);line-height:1.4;}
+.rs-sig:last-child{border-bottom:none;}
 
 /* DIFF */
 .diff-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.75rem 0;}
@@ -200,7 +247,7 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
 .diff-t{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;color:var(--slate);margin-bottom:.5rem;}
 .diff-b{font-size:12px;color:#374D64;line-height:1.65;}
 
-/* CANDIDATE CARDS */
+/* CANDS */
 .cand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.75rem 0;}
 .cand{background:var(--white);padding:1.35rem;}
 .cand-init{width:30px;height:30px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:.75rem;}
@@ -216,53 +263,68 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
 .tl-phase{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
 .tl-node{width:11px;height:11px;border-radius:50%;background:var(--white);border:1.5px solid var(--rule);position:relative;z-index:1;margin-bottom:.8rem;transition:background .25s,border-color .25s;}
 .tl-node.on{background:var(--blue);border-color:var(--blue);}
-.tl-n{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;color:var(--slate);text-align:center;margin-bottom:2px;letter-spacing:.3px;}
+.tl-n{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;color:var(--slate);text-align:center;margin-bottom:2px;}
 .tl-w{font-size:9px;color:var(--silver);text-align:center;margin-bottom:4px;}
 .tl-d{font-size:9px;color:#374D64;text-align:center;line-height:1.45;padding:0 .3rem;}
 
-/* COMPANY CONTEXT SIDEBAR LAYOUT */
+/* SPLIT LAYOUT */
 .split{display:grid;grid-template-columns:1fr 320px;gap:2.5rem;align-items:start;margin-top:1.75rem;}
+
+/* PAST PROPOSALS PANEL */
+.history-panel{background:#0E1826;border:1px solid #1A2D42;margin-top:1.5rem;padding:1.25rem;}
+.history-hdr{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--silver);margin-bottom:.9rem;display:flex;justify-content:space-between;align-items:center;}
+.history-item{display:flex;align-items:center;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid #1A2D42;cursor:pointer;transition:background .15s;}
+.history-item:last-child{border-bottom:none;}
+.history-item:hover{background:rgba(10,79,196,.05);}
+.history-name{font-size:12px;color:var(--white);font-weight:500;}
+.history-meta{font-size:10px;color:var(--silver);}
+.history-arrow{font-size:11px;color:var(--silver);}
+.history-empty{font-size:11px;color:#1E3048;padding:.4rem 0;}
 
 /* CTA */
 #pc{padding:0;max-width:100%;opacity:1;transform:none;}
 .cta-wrap{background:var(--blue);padding:3.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
-.cta-l-lbl{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.3rem;}
-.cta-l-name{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:.3rem;}
-.cta-l-line{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:2px;}
-.cta-btn{display:inline-block;margin-top:1rem;background:var(--white);color:var(--blue);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.6rem 1.4rem;text-decoration:none;transition:opacity .15s;}
+.cta-lbl{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.3rem;}
+.cta-name{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:.3rem;}
+.cta-line{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:2px;}
+.cta-btn{display:inline-block;margin-top:1rem;background:var(--white);color:var(--blue);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.6rem 1.4rem;text-decoration:none;}
 .cta-btn:hover{opacity:.9;}
 .cta-quote{max-width:290px;font-size:13px;color:rgba(255,255,255,.5);line-height:1.65;text-align:right;font-style:italic;}
 .pfooter{background:var(--deep);padding:1.3rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;border-top:1px solid rgba(255,255,255,.05);}
 .pfooter-conf{font-size:10px;color:rgba(255,255,255,.25);flex:1;text-align:center;}
 .pfooter-tag{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--green);}
 
-/* ─── PRINT ─── */
+/* ── PRINT ── */
 @media print{
   @page{size:A4 landscape;margin:0;}
   body{background:white;}
-  #intake,#loading{display:none!important;}
+  #intake,#loading,#questions{display:none!important;}
   #proposal{display:block!important;}
-  .pnav,.mob-nav,.pnav-back,.pnav-actions{display:none!important;}
+  .pnav,.mob-nav,.pnav-back,.pnav-actions,.blindspot-panel,.edit-hint{display:none!important;}
+  #print-cover{display:flex!important;min-height:100vh;flex-direction:column;justify-content:space-between;padding:3cm 2.5cm;background:#1C2B3A;page-break-after:always;break-after:page;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .ps{opacity:1!important;transform:none!important;padding:1.8cm 1.6cm;page-break-after:always;break-after:page;max-width:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
   #ph{min-height:100vh;page-break-after:always;break-after:page;padding:0;}
   #pc{page-break-after:avoid;break-after:avoid;}
   .ph-inner{padding:2.2cm 1.8cm;}
-  .stat-row,.risk-grid,.diff-row,.cand-grid,.ff,.matrix-wrap{break-inside:avoid;}
+  .stat-row,.risk-grid,.diff-row,.cand-grid,.ff,.matrix-wrap,.comp-table{break-inside:avoid;}
   .tl-fill{width:100%!important;}
   .tl-node{background:var(--blue)!important;border-color:var(--blue)!important;}
   .cta-wrap{background:#0A4FC4!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .pfooter{background:#0F1824!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   #ph{background:#1C2B3A!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .pull{background:#EBF1FC!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  a{color:inherit!important;text-decoration:none!important;}
   .split{grid-template-columns:1fr!important;}
+  [contenteditable]:hover,[contenteditable]:focus{background:transparent!important;outline:none!important;}
+  a{color:inherit!important;text-decoration:none!important;}
+  .page-header{display:flex!important;}
 }
+.page-header{display:none;position:fixed;top:0;left:0;right:0;justify-content:space-between;align-items:center;padding:.4cm .8cm;border-bottom:1px solid var(--rule);font-size:8px;color:var(--silver);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;}
 
-/* ─── MOBILE ─── */
+/* RESPONSIVE */
 @media(max-width:768px){
   .pnav-links{display:none;}
   .hamburger{display:flex;}
-  .pnav-actions .pnav-btn:not(.pri){display:none;}
+  .pnav-actions .pnav-btn:not(.pri):not(.share){display:none;}
   .ph-inner{padding:4rem 1.4rem 3rem;}
   .ph-title{font-size:28px;}
   .ps{padding:4rem 1.2rem 3rem;}
@@ -274,6 +336,7 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
   .diff-row{grid-template-columns:1fr;}
   .ff{grid-template-columns:1fr;}
   .split{grid-template-columns:1fr;}
+  .radar-wrap{flex-direction:column;}
   .cta-wrap{flex-direction:column;padding:2.25rem 1.5rem;}
   .cta-quote{text-align:left;}
   .pfooter{flex-direction:column;text-align:center;padding:1.25rem;}
@@ -287,35 +350,34 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
   .ps{opacity:1!important;transform:none!important;transition:none!important;}
   .tl-fill{transition:none!important;}
   .ld-mark{animation:none!important;}
-  .stat-num{transition:none!important;}
 }
 </style>
 </head>
 <body>
 
-<!-- INTAKE -->
-<div id="intake">
+<!-- ── INTAKE ── -->
+<div id="intake" class="screen">
   <div class="logo">
     <div class="logo-mark">
-      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="13" y="1" width="16" height="16" rx="0" transform="rotate(45 13 1)" fill="#0A4FC4" opacity=".15"/>
-        <rect x="13" y="4" width="12" height="12" rx="0" transform="rotate(45 13 4)" fill="none" stroke="#0A4FC4" stroke-width="1.5"/>
-        <rect x="13" y="8.5" width="5" height="5" rx="0" transform="rotate(45 13 8.5)" fill="#0A4FC4"/>
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="12" y="1" width="15" height="15" transform="rotate(45 12 1)" fill="#0A4FC4" opacity=".12"/>
+        <rect x="12" y="4" width="11" height="11" transform="rotate(45 12 4)" fill="none" stroke="#0A4FC4" stroke-width="1.5"/>
+        <rect x="12" y="8" width="5" height="5" transform="rotate(45 12 8)" fill="#0A4FC4"/>
       </svg>
     </div>
     <div class="logo-word">MERIDIAN<sup>16</sup></div>
   </div>
   <p class="eyebrow">Executive Search Intelligence</p>
-  <h1 class="intake-head">Drop a brief.<br><em>Get a proposal.</em></h1>
-  <p class="intake-sub">Text your brief, upload a file, or paste the spec. Structured intelligence. Delivered in three hours.</p>
+  <h1 class="screen-head">Drop a brief.<br><em>Get a proposal.</em></h1>
+  <p class="screen-sub">Brief, file, or both. We ask a few questions, enrich with live data, then generate.</p>
   <div class="card">
     <div>
       <label for="brief-text">Search Brief <span class="opt">— optional if uploading a file</span></label>
-      <textarea id="brief-text" placeholder="Paste the position spec, client mandate, or background on the search. Include company context, the role, what good looks like, and any candidate considerations."></textarea>
+      <textarea id="brief-text" placeholder="Position spec, client mandate, or background. Company context, the role, what good looks like, candidate considerations."></textarea>
     </div>
     <div class="fg">
       <label>Attach File <span class="opt">— PDF or DOCX, optional</span></label>
-      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="onDragOver(event)" ondrop="onDrop(event)" ondragleave="this.classList.remove('drag')">
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="onDrag(event)" ondrop="onDrop(event)" ondragleave="this.classList.remove('drag')">
         <div class="up-icon" id="up-icon">↑</div>
         <div class="up-txt" id="up-txt"><strong>Click to attach</strong> or drag and drop<br>PDF or DOCX · max 10 MB</div>
       </div>
@@ -327,45 +389,97 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
         <button class="add-btn" onclick="addLink()">+ Add Link</button>
       </div>
       <div id="links-list"></div>
-      <div id="links-mt" class="links-mt">No links added. Add press coverage, company pages, or reports to enrich the proposal.</div>
+      <div id="links-mt" class="links-mt">No links added. Add press coverage, company pages, or reports.</div>
     </div>
     <div class="g2">
       <div><label for="c-name">Consultant Name</label><input type="text" id="c-name" placeholder="e.g. James Whitfield"></div>
       <div><label for="c-email">Contact Email</label><input type="email" id="c-email" placeholder="e.g. james@meridian16.org"></div>
     </div>
-    <button class="gen-btn" onclick="generate()">Generate Proposal</button>
+    <button class="pri-btn" onclick="startFlow()">Continue →</button>
     <div class="err" id="err"></div>
+  </div>
+  <!-- PAST PROPOSALS -->
+  <div class="card" id="history-card" style="margin-top:1rem;display:none;">
+    <div class="history-hdr">
+      <span>Past Proposals</span>
+      <button class="add-btn" onclick="clearHistory()">Clear All</button>
+    </div>
+    <div id="history-list"></div>
   </div>
 </div>
 
-<!-- LOADING -->
+<!-- ── QUESTIONS ── -->
+<div id="questions" class="screen">
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="12" y="1" width="15" height="15" transform="rotate(45 12 1)" fill="#0A4FC4" opacity=".12"/>
+        <rect x="12" y="4" width="11" height="11" transform="rotate(45 12 4)" fill="none" stroke="#0A4FC4" stroke-width="1.5"/>
+        <rect x="12" y="8" width="5" height="5" transform="rotate(45 12 8)" fill="#0A4FC4"/>
+      </svg>
+    </div>
+    <div class="logo-word">MERIDIAN<sup>16</sup></div>
+  </div>
+  <p class="eyebrow">Brief Refinement</p>
+  <h2 class="screen-head" style="font-size:clamp(18px,3vw,30px);">A few questions<br><em>before we generate.</em></h2>
+  <p class="screen-sub">These gaps affect proposal quality. Answer what you can — skip the rest.</p>
+  <div class="card card-wide">
+    <div class="q-progress" id="q-progress"></div>
+    <div class="q-intro" id="q-intro"></div>
+    <div id="q-items"></div>
+    <div style="display:flex;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap;">
+      <button class="pri-btn" style="width:auto;flex:1;" onclick="submitAnswers()">Generate Proposal →</button>
+      <button class="sec-btn" onclick="skipAll()">Skip All & Generate</button>
+    </div>
+    <div class="err" id="q-err"></div>
+  </div>
+</div>
+
+<!-- ── LOADING ── -->
 <div id="loading">
   <div style="display:flex;align-items:center;gap:11px;">
     <div class="ld-mark"></div>
     <div class="ld-name">Meridian 16</div>
   </div>
-  <div class="ld-status" id="ld-status">Parsing mandate...</div>
+  <div class="ld-status" id="ld-status">Analysing brief...</div>
   <div class="prog-track"><div class="prog-bar" id="prog-bar"></div></div>
 </div>
 
-<!-- PROPOSAL -->
+<!-- ── PROPOSAL ── -->
 <div id="proposal">
+  <!-- PRINT COVER (hidden on screen, shown on print) -->
+  <div id="print-cover">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:2rem;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <rect x="12" y="1" width="15" height="15" transform="rotate(45 12 1)" fill="rgba(255,255,255,.15)"/>
+          <rect x="12" y="4" width="11" height="11" transform="rotate(45 12 4)" fill="none" stroke="#0A4FC4" stroke-width="1.5"/>
+          <rect x="12" y="8" width="5" height="5" transform="rotate(45 12 8)" fill="#0A4FC4"/>
+        </svg>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:white;">MERIDIAN<sup style="font-size:9px;color:#0A4FC4;">16</sup></div>
+      </div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.75rem;">Executive Search Intelligence</div>
+      <div id="cv-title" style="font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:700;text-transform:uppercase;color:white;line-height:.97;max-width:700px;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid rgba(255,255,255,.15);padding-top:1.5rem;">
+      <div id="cv-meta" style="display:flex;gap:2.5rem;"></div>
+      <div style="font-size:9px;color:rgba(255,255,255,.3);text-align:right;">Confidential<br>Not for distribution</div>
+    </div>
+  </div>
+
   <nav class="pnav">
     <div class="pnav-prog" id="pnav-prog"></div>
     <div class="pnav-left">
       <button class="pnav-back" onclick="back()">← New Brief</button>
       <div class="pnav-logo">
-        <div class="pnav-mark">
-          <svg viewBox="0 0 18 18" fill="none">
-            <rect x="9" y="1" width="11" height="11" transform="rotate(45 9 1)" fill="#0A4FC4" opacity=".2"/>
-            <rect x="9" y="3" width="8" height="8" transform="rotate(45 9 3)" fill="none" stroke="#0A4FC4" stroke-width="1.2"/>
-            <rect x="9" y="6" width="3.5" height="3.5" transform="rotate(45 9 6)" fill="#0A4FC4"/>
-          </svg>
-        </div>
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="12" y="4" width="11" height="11" transform="rotate(45 12 4)" fill="none" stroke="#0A4FC4" stroke-width="1.5"/>
+          <rect x="12" y="8" width="5" height="5" transform="rotate(45 12 8)" fill="#0A4FC4"/>
+        </svg>
         <div class="pnav-word">MERIDIAN<sup>16</sup></div>
       </div>
     </div>
-    <div class="pnav-links" id="pnav-links">
+    <div class="pnav-links">
       <a href="#s1" class="pnav-link">Context</a>
       <a href="#s2" class="pnav-link">Imperative</a>
       <a href="#s3" class="pnav-link">Landscape</a>
@@ -374,6 +488,7 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
       <a href="#s6" class="pnav-link">Process</a>
     </div>
     <div class="pnav-actions">
+      <button class="pnav-btn share" onclick="shareProposal()">⤴ Share</button>
       <button class="pnav-btn" onclick="window.print()">Export PDF</button>
       <button class="pnav-btn pri" id="nav-cta">Request Proposal</button>
     </div>
@@ -388,14 +503,29 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
     <a href="#s6" onclick="closeMob()">Process</a>
   </div>
 
+  <!-- BLIND SPOT PANEL -->
+  <div style="max-width:1040px;margin:0 auto;padding:0 2rem;">
+    <div class="blindspot-panel" id="blindspot-panel" style="display:none;">
+      <div class="blindspot-hdr" onclick="toggleBS()">
+        <div class="blindspot-hdr-left">
+          <div class="blindspot-icon"></div>
+          <div class="blindspot-title">Blind Spot Detector</div>
+          <div class="blindspot-count" id="bs-count">0 flags</div>
+        </div>
+        <div class="blindspot-toggle" id="bs-toggle">Show ↓</div>
+      </div>
+      <div class="blindspot-body" id="bs-body"></div>
+    </div>
+  </div>
+
   <!-- HERO -->
   <section id="ph" style="padding-top:52px;">
     <div class="ph-grid"></div>
     <div class="ph-stripe"></div>
     <div class="ph-inner">
       <div class="ph-conf">Confidential — For Authorised Review Only</div>
-      <h1 class="ph-title" id="ph-title">Loading...</h1>
-      <p class="ph-sub" id="ph-sub"></p>
+      <h1 class="ph-title" id="ph-title" contenteditable="true" spellcheck="false">Loading...</h1>
+      <p class="ph-sub" id="ph-sub" contenteditable="true" spellcheck="false"></p>
       <div class="ph-meta" id="ph-meta"></div>
     </div>
   </section>
@@ -403,13 +533,18 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
   <!-- S1 CONTEXT -->
   <section class="ps" id="s1">
     <div class="ex-label">Exhibit 01 — Company Context &amp; Inflection Point</div>
-    <h2 class="ps-head" id="s1-head"></h2>
+    <h2 class="ps-head" id="s1-head" contenteditable="true" spellcheck="false"></h2>
     <div class="split">
       <div>
-        <div class="ps-body" id="s1-body"></div>
-        <div class="pull" id="s1-pull" style="display:none;"><p id="s1-pull-txt"></p><cite id="s1-pull-src"></cite></div>
+        <div class="ps-body" id="s1-body" contenteditable="true" spellcheck="false"></div>
+        <div class="pull" id="s1-pull" style="display:none;">
+          <p id="s1-pull-txt" contenteditable="true" spellcheck="false"></p>
+          <cite id="s1-pull-src" contenteditable="true" spellcheck="false"></cite>
+        </div>
       </div>
-      <div class="stat-row" id="stat-row" style="margin:0;grid-template-columns:1fr 1fr;"></div>
+      <div>
+        <div class="stat-row" id="stat-row" style="margin:0;grid-template-columns:1fr 1fr;"></div>
+      </div>
     </div>
   </section>
   <div class="hrule"></div>
@@ -417,28 +552,35 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
   <!-- S2 IMPERATIVE -->
   <section class="ps" id="s2">
     <div class="ex-label">Exhibit 02 — Strategic Imperative &amp; Force-Field Analysis</div>
-    <h2 class="ps-head" id="s2-head"></h2>
-    <div class="ps-body" id="s2-body"></div>
+    <h2 class="ps-head" id="s2-head" contenteditable="true" spellcheck="false"></h2>
+    <div class="ps-body" id="s2-body" contenteditable="true" spellcheck="false"></div>
     <div class="ff" id="ff"></div>
   </section>
   <div class="hrule"></div>
 
   <!-- S3 LANDSCAPE -->
   <section class="ps" id="s3">
-    <div class="ex-label">Exhibit 03 — Market Landscape &amp; Talent Pool Analysis</div>
-    <h2 class="ps-head" id="s3-head"></h2>
-    <div class="ps-body" id="s3-body"></div>
+    <div class="ex-label">Exhibit 03 — Market Landscape, Talent Pool &amp; Compensation</div>
+    <h2 class="ps-head" id="s3-head" contenteditable="true" spellcheck="false"></h2>
+    <div class="ps-body" id="s3-body" contenteditable="true" spellcheck="false"></div>
     <div class="chart-area" id="chart-area"></div>
     <div class="chart-lbl" id="matrix-lbl" style="margin-top:1.5rem;"></div>
     <div class="matrix-wrap" id="matrix-wrap"></div>
+    <!-- COMP BENCHMARKING -->
+    <div id="comp-section" style="margin-top:2rem;display:none;">
+      <div class="ex-label" style="margin-bottom:.75rem;"><span style="font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--silver);">Compensation Benchmarking</span></div>
+      <div id="comp-intro" class="ps-body" style="margin-bottom:1rem;max-width:680px;font-size:13px;"></div>
+      <div id="comp-table-wrap"></div>
+      <div class="comp-note" id="comp-note"></div>
+    </div>
   </section>
   <div class="hrule"></div>
 
   <!-- S4 PROFILE -->
   <section class="ps" id="s4">
     <div class="ex-label">Exhibit 04 — Competency Framework &amp; Talent Paradox</div>
-    <h2 class="ps-head" id="s4-head"></h2>
-    <div class="ps-body" id="s4-body"></div>
+    <h2 class="ps-head" id="s4-head" contenteditable="true" spellcheck="false"></h2>
+    <div class="ps-body" id="s4-body" contenteditable="true" spellcheck="false"></div>
     <div id="radar-wrap"></div>
   </section>
   <div class="hrule"></div>
@@ -446,8 +588,8 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
   <!-- S5 RISK -->
   <section class="ps" id="s5">
     <div class="ex-label">Exhibit 05 — Failure Mode Analysis</div>
-    <h2 class="ps-head" id="s5-head"></h2>
-    <div class="ps-body" id="s5-body"></div>
+    <h2 class="ps-head" id="s5-head" contenteditable="true" spellcheck="false"></h2>
+    <div class="ps-body" id="s5-body" contenteditable="true" spellcheck="false"></div>
     <div class="risk-grid" id="risk-grid"></div>
   </section>
   <div class="hrule"></div>
@@ -455,41 +597,40 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
   <!-- S6 PROCESS -->
   <section class="ps" id="s6">
     <div class="ex-label">Exhibit 06 — Search Process &amp; Candidate Landscape</div>
-    <h2 class="ps-head" id="s6-head"></h2>
-    <div class="ps-body" id="s6-body"></div>
+    <h2 class="ps-head" id="s6-head" contenteditable="true" spellcheck="false"></h2>
+    <div class="ps-body" id="s6-body" contenteditable="true" spellcheck="false"></div>
     <div class="tl-wrap" id="tl-wrap"></div>
     <div class="ex-label" style="margin-top:2rem;" id="cand-lbl"></div>
     <div class="cand-grid" id="cand-grid"></div>
     <div class="diff-row" id="diff-row" style="margin-top:2rem;"></div>
   </section>
 
-  <!-- CLOSE -->
+  <!-- CTA CLOSE -->
   <section id="pc" class="ps" style="padding:0;opacity:1;transform:none;">
     <div class="cta-wrap">
       <div>
-        <div class="cta-l-lbl">Start the Conversation</div>
-        <div class="cta-l-name" id="cta-name">Meridian 16</div>
-        <div class="cta-l-line" id="cta-role">Executive Search Intelligence</div>
-        <div class="cta-l-line" id="cta-email-ln"></div>
+        <div class="cta-lbl">Start the Conversation</div>
+        <div class="cta-name" id="cta-name" contenteditable="true" spellcheck="false">Meridian 16</div>
+        <div class="cta-line" id="cta-role">Executive Search Intelligence</div>
+        <div class="cta-line" id="cta-email-ln" contenteditable="true" spellcheck="false"></div>
         <a class="cta-btn" id="cta-link" href="#">Request a Proposal</a>
       </div>
       <div style="text-align:right;">
         <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-bottom:.65rem;">
-          <svg width="20" height="20" viewBox="0 0 18 18" fill="none">
-            <rect x="9" y="1" width="11" height="11" transform="rotate(45 9 1)" fill="rgba(255,255,255,.15)"/>
-            <rect x="9" y="3" width="8" height="8" transform="rotate(45 9 3)" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/>
-            <rect x="9" y="6" width="3.5" height="3.5" transform="rotate(45 9 6)" fill="rgba(255,255,255,.8)"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="12" y="4" width="11" height="11" transform="rotate(45 12 4)" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+            <rect x="12" y="8" width="5" height="5" transform="rotate(45 12 8)" fill="rgba(255,255,255,.75)"/>
           </svg>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.75);">MERIDIAN<sup style="font-size:8px;letter-spacing:1px;">16</sup></div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.75);">MERIDIAN<sup style="font-size:8px;color:rgba(255,255,255,.5);">16</sup></div>
         </div>
-        <p class="cta-quote" id="cta-quote"></p>
+        <p class="cta-quote" id="cta-quote" contenteditable="true" spellcheck="false"></p>
       </div>
     </div>
     <div class="pfooter">
       <div style="display:flex;align-items:center;gap:7px;">
-        <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
-          <rect x="9" y="2" width="9" height="9" transform="rotate(45 9 2)" fill="none" stroke="#0A4FC4" stroke-width="1.5"/>
-          <rect x="9" y="5.5" width="3.5" height="3.5" transform="rotate(45 9 5.5)" fill="#0A4FC4"/>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+          <rect x="12" y="4" width="11" height="11" transform="rotate(45 12 4)" fill="none" stroke="#0A4FC4" stroke-width="1.5"/>
+          <rect x="12" y="8" width="5" height="5" transform="rotate(45 12 8)" fill="#0A4FC4"/>
         </svg>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--white);">MERIDIAN16</div>
       </div>
@@ -499,28 +640,35 @@ textarea::placeholder,input::placeholder{color:#1E3048;}
   </section>
 </div>
 
-<script>
-var fileData = null, linkN = 0, cName = '', cEmail = '';
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-/* LINKS */
-function addLink() {
-  var c = document.getElementById('links-list'), e = document.getElementById('links-mt');
-  if(e) e.style.display='none'; linkN++;
-  var id=linkN, r=document.createElement('div'); r.className='link-row'; r.id='lr'+id;
+<script>
+var fileData=null, linkN=0, cName='', cEmail='';
+var currentData=null, currentBrief='', currentLinks=[];
+
+/* ── LOGO SVG helper ── */
+var LOGO_SVG='<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="1" width="15" height="15" transform="rotate(45 12 1)" fill="#0A4FC4" opacity=".12"/><rect x="12" y="4" width="11" height="11" transform="rotate(45 12 4)" fill="none" stroke="#0A4FC4" stroke-width="1.5"/><rect x="12" y="8" width="5" height="5" transform="rotate(45 12 8)" fill="#0A4FC4"/></svg>';
+
+/* ── LINKS ── */
+function addLink(){
+  var c=document.getElementById('links-list'),e=document.getElementById('links-mt');
+  if(e)e.style.display='none'; linkN++;
+  var id=linkN,r=document.createElement('div'); r.className='link-row'; r.id='lr'+id;
   r.innerHTML='<select class="ltype"><option value="press">Press</option><option value="linkedin">LinkedIn</option><option value="company">Company</option><option value="report">Report</option><option value="source">Source</option></select>'+
     '<input type="url" class="lurl" placeholder="https://..." style="width:100%;">'+
     '<input type="text" class="lnote" placeholder="Note (optional)" style="width:100%;">'+
     '<button class="link-del" onclick="rmLink('+id+')">×</button>';
   c.appendChild(r);
 }
-function rmLink(id) {
-  var r=document.getElementById('lr'+id); if(r) r.remove();
-  var c=document.getElementById('links-list'), e=document.getElementById('links-mt');
-  if(e && c.children.length===0) e.style.display='block';
+function rmLink(id){
+  var r=document.getElementById('lr'+id); if(r)r.remove();
+  var c=document.getElementById('links-list'),e=document.getElementById('links-mt');
+  if(e&&c.children.length===0)e.style.display='block';
 }
 
-/* FILE */
-function onDragOver(ev){ev.preventDefault();document.getElementById('upload-zone').classList.add('drag');}
+/* ── FILE ── */
+function onDrag(ev){ev.preventDefault();document.getElementById('upload-zone').classList.add('drag');}
 function onDrop(ev){ev.preventDefault();document.getElementById('upload-zone').classList.remove('drag');var f=ev.dataTransfer.files[0];if(f)loadFile(f);}
 function onFileSelect(ev){var f=ev.target.files[0];if(f)loadFile(f);}
 function loadFile(f){
@@ -532,11 +680,73 @@ function loadFile(f){
   else{r.onload=function(e){fileData={type:'text',data:e.target.result};};r.readAsText(f);}
 }
 
-/* PROGRESS */
+/* ── PROGRESS ── */
 function prog(pct,msg){document.getElementById('prog-bar').style.width=pct+'%';document.getElementById('ld-status').textContent=msg;}
 
-/* GENERATE */
-async function generate(){
+/* ── HISTORY ── */
+function saveToHistory(data){
+  try{
+    var hist=JSON.parse(localStorage.getItem('m16_history')||'[]');
+    hist.unshift({id:Date.now(),company:data.company||'Unknown',role:data.role||'Search',ts:new Date().toLocaleDateString(),data:data});
+    if(hist.length>10)hist=hist.slice(0,10);
+    localStorage.setItem('m16_history',JSON.stringify(hist));
+    renderHistory();
+  }catch(e){}
+}
+function renderHistory(){
+  try{
+    var hist=JSON.parse(localStorage.getItem('m16_history')||'[]');
+    var card=document.getElementById('history-card'),list=document.getElementById('history-list');
+    if(!hist.length){card.style.display='none';return;}
+    card.style.display='block';
+    list.innerHTML=hist.map(function(h){
+      return'<div class="history-item" onclick="loadFromHistory(\''+h.id+'\')">'+
+        '<div><div class="history-name">'+esc(h.company)+' — '+esc(h.role)+'</div><div class="history-meta">'+esc(h.ts)+'</div></div>'+
+        '<div class="history-arrow">→</div></div>';
+    }).join('');
+  }catch(e){}
+}
+function loadFromHistory(id){
+  try{
+    var hist=JSON.parse(localStorage.getItem('m16_history')||'[]');
+    var item=hist.find(function(h){return h.id===parseInt(id);});
+    if(item){render(item.data);document.getElementById('intake').style.display='none';}
+  }catch(e){}
+}
+function clearHistory(){
+  localStorage.removeItem('m16_history');
+  renderHistory();
+}
+
+/* ── SHARE ── */
+function shareProposal(){
+  if(!currentData)return;
+  try{
+    var key='m16_'+Date.now();
+    localStorage.setItem(key,JSON.stringify(currentData));
+    var url=window.location.href.split('?')[0].split('#')[0]+'?proposal='+key;
+    navigator.clipboard.writeText(url).then(function(){showToast('Link copied to clipboard');}).catch(function(){showToast('URL: '+url.slice(0,40)+'...');});
+  }catch(e){showToast('Copy the URL from your browser');}
+}
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2500);
+}
+function checkShareParam(){
+  try{
+    var params=new URLSearchParams(window.location.search);
+    var key=params.get('proposal');
+    if(key){
+      var saved=localStorage.getItem(key);
+      if(saved){render(JSON.parse(saved));return true;}
+    }
+  }catch(e){}
+  return false;
+}
+
+/* ── FLOW ── */
+async function startFlow(){
   var brief=document.getElementById('brief-text').value.trim();
   cName=document.getElementById('c-name').value.trim()||'Meridian 16';
   cEmail=document.getElementById('c-email').value.trim()||'hello@meridian16.org';
@@ -544,27 +754,98 @@ async function generate(){
   if(!brief&&!fileData){showErr('Please add a brief or attach a file.');return;}
   if(!content&&fileData&&fileData.type==='text')content=fileData.data;
   if(!content)content='';
-  var lurls=document.querySelectorAll('.lurl'),ltypes=document.querySelectorAll('.ltype'),lnotes=document.querySelectorAll('.lnote'),links=[];
-  lurls.forEach(function(el,i){var u=el.value.trim();if(u)links.push({url:u,type:ltypes[i]?ltypes[i].value:'source',note:lnotes[i]?lnotes[i].value.trim():''});});
+  var lurls=document.querySelectorAll('.lurl'),ltypes=document.querySelectorAll('.ltype'),lnotes=document.querySelectorAll('.lnote');
+  currentLinks=[];
+  lurls.forEach(function(el,i){var u=el.value.trim();if(u)currentLinks.push({url:u,type:ltypes[i]?ltypes[i].value:'source',note:lnotes[i]?lnotes[i].value.trim():''});});
+  currentBrief=content;
   hideErr();
   document.getElementById('intake').style.display='none';
   document.getElementById('loading').style.display='flex';
-  var steps=[[10,'Parsing mandate...'],[22,'Mapping market landscape...'],[35,'Analysing competitive dynamics...'],[48,'Building competency framework...'],[61,'Constructing failure modes...'],[74,'Synthesising talent paradox...'],[85,'Drafting proposal narrative...'],[94,'Finalising exhibits...']];
-  var si=0, iv=setInterval(function(){if(si<steps.length){prog(steps[si][0],steps[si][1]);si++;}},1300);
+  prog(8,'Analysing brief...');
   try{
-    var sys='You are a senior search intelligence consultant at Meridian 16. You write executive search proposals at the standard of McKinsey Quarterly — every sentence specific, every claim defensible, every section advancing an argument.\n\nWriting rules:\n- No em dashes. Rewrite the sentence.\n- No standalone sentences under 8 words.\n- No passive voice where active is possible.\n- Insight before assertion: state the implication, then the evidence.\n- Specificity is credibility. Estimate where you must — flag estimates with (est.).\n\nAbsolutely banned: "delve", "it\'s worth noting", "game-changer", "unlock", "leverage" (as verb), "transformative", "cutting-edge", "harness", "navigating", "robust", "seamless", "unprecedented", "pivotal", "mission-critical", "in today\'s landscape", "rapidly evolving".\n\nReturn ONLY valid JSON. No markdown, no preamble, no explanation.';
-    var lsec=links.length>0?'\n\nSOURCE LINKS — treat as primary research. Extract specific facts, reference press by outlet and date, cite reports by name:\n'+links.map(function(l){return'- ['+l.type.toUpperCase()+'] '+l.url+(l.note?' ('+l.note+')':'');}).join('\n'):'';
-    var prompt='Generate a complete, intelligence-grade Meridian 16 executive search proposal from this mandate. Synthesise where facts are not provided — flag with (est.). Every exhibit must contain specific, non-generic content tailored to this exact mandate.\n\nMANDATE:\n'+content+lsec+'\n\nReturn this JSON structure exactly:\n\n{\n  "company":"Company name",\n  "role":"Role title e.g. CFO / CTO / CIDO",\n  "hero_title":"THE [COMPANY] [ROLE]: [SHARP ONE-LINE IMPLICATION OF WHY THIS MATTERS NOW]. All caps. Punchy. Max 12 words. Specific to this mandate.",\n  "hero_sub":"One sentence. What this proposal covers, who prepared it, and when.",\n  "hero_meta":[\n    {"label":"Company","value":"..."},\n    {"label":"Role","value":"..."},\n    {"label":"Mandate Type","value":"Retained Executive Search"},\n    {"label":"Prepared By","value":"Meridian 16"}\n  ],\n  "stats":[\n    {"num":"...","label":"...","ctx":"One sharp sentence on what this means for the search"},\n    {"num":"...","label":"...","ctx":"..."},\n    {"num":"...","label":"...","ctx":"..."},\n    {"num":"...","label":"...","ctx":"..."}\n  ],\n  "s1_head":"WHAT CHANGED, AND WHEN (all caps, max 8 words — name the event or inflection)",\n  "s1_body":"3-4 sentences. Company at scale, the specific thing that changed, why it changes this hire. No generic framing.",\n  "s1_pull":"One sentence a board member would quote verbatim — a specific implication, not a platitude.",\n  "s1_pull_src":"Attribution — e.g. Meridian 16 Analysis or FY2024 Annual Report",\n  "s2_head":"THE COST OF NOT HIRING THIS PERSON (all caps, max 9 words)",\n  "s2_body":"2-3 sentences. Specific cost of delay or wrong hire — quantify at least one consequence.",\n  "forces":{\n    "push_head":"Accelerants — Why This Must Happen Now",\n    "push_items":[\n      {"text":"Name a specific competitor, metric, or deadline driving urgency."},\n      {"text":"A second specific pressure — regulatory, market, or operational."},\n      {"text":"A third — board, investor, or strategic pressure."}\n    ],\n    "pull_head":"Constraints — What Makes This Hard to Execute",\n    "pull_items":[\n      {"text":"The specific talent scarcity problem with a number or named tension."},\n      {"text":"A second constraint — compensation, geography, or culture."},\n      {"text":"A third — organisational complexity or competing priorities."}\n    ]\n  },\n  "s3_head":"WHERE THE TALENT ACTUALLY SITS",\n  "s3_body":"2-3 sentences. Which specific sectors hold the right profiles. Which obvious pools are wrong and why. Name industries or company types.",\n  "chart_title":"CANDIDATE POOL RELEVANCE BY SECTOR",\n  "market_bars":[\n    {"label":"Most relevant sector","value":88,"note":"Why this sector is the primary hunting ground"},\n    {"label":"Second sector","value":65,"note":"What makes them transferable"},\n    {"label":"Third sector","value":48,"note":"..."},\n    {"label":"Fourth sector","value":30,"note":"..."},\n    {"label":"Fifth sector (obvious but wrong)","value":14,"note":"Why the obvious pool fails — the specific gap"}\n  ],\n  "matrix_title":"TALENT POOL ASSESSMENT MATRIX",\n  "talent_matrix":[\n    {"pool":"Pool name","depth":"High / Medium / Low","comp_fit":"High / Medium / Low","culture_risk":"Low / Medium / High","timeline":"X–Y weeks","note":"One-line assessment"},\n    {"pool":"...","depth":"...","comp_fit":"...","culture_risk":"...","timeline":"...","note":"..."},\n    {"pool":"...","depth":"...","comp_fit":"...","culture_risk":"...","timeline":"...","note":"..."},\n    {"pool":"...","depth":"...","comp_fit":"...","culture_risk":"...","timeline":"...","note":"..."}\n  ],\n  "s4_head":"THE THREE THINGS THAT MUST ALL BE TRUE",\n  "s4_body":"2-3 sentences. Name the specific combination of attributes that does not exist at volume. Be precise — not adjectives, but concrete capabilities.",\n  "radar_note":"One sentence on what the gap between ideal and typical means for sourcing. Where will Meridian 16 look that others won\'t?",\n  "radar_axes":[\n    {"label":"Competency name","ideal":92,"typical":50},\n    {"label":"Competency name","ideal":85,"typical":68},\n    {"label":"Competency name","ideal":90,"typical":35},\n    {"label":"Competency name","ideal":78,"typical":62},\n    {"label":"Competency name","ideal":82,"typical":54}\n  ],\n  "s5_head":"WHAT GOES WRONG IN THIS SEARCH",\n  "s5_body":"1-2 sentences. Why this specific category produces wrong hires — the structural reason, not the obvious answer.",\n  "wrong_archetypes":[\n    {"name":"Archetype A","why_attractive":"Why they look right on paper or in interview","why_wrong":"The precise failure mode — what they cannot do that this role requires","signals":["Resume signal — what to look for","Interview signal — what question surfaces this","Reference signal — what to ask former employers"]},\n    {"name":"Archetype B","why_attractive":"...","why_wrong":"...","signals":["...","...","..."]}\n  ],\n  "right_archetype":{"name":"The Profile That Works","description":"2-3 sentences. What this person has actually done — not what they are like. Track record, not character.","signals":["What they have built or fixed","The decision they have made under pressure","The stakeholder relationship that proves credibility"]},\n  "s6_head":"FROM MANDATE TO PLACEMENT",\n  "s6_body":"1-2 sentences. What is non-standard about this process for this specific mandate.",\n  "phases":[\n    {"name":"Deep Brief","week":"Week 1","desc":"What Meridian 16 must uncover in the brief phase that a standard intake misses for this search."},\n    {"name":"Market Map","week":"Weeks 1–2","desc":"Which specific sectors and companies the mapping begins with, and the logic."},\n    {"name":"Assessment","week":"Weeks 2–4","desc":"The specific competency tests and interview design for this profile."},\n    {"name":"Shortlist","week":"Week 5","desc":"What a calibrated slate looks like — number of candidates, diversity of backgrounds."},\n    {"name":"Close","week":"Weeks 6–10","desc":"The specific risks in offer stage and onboarding for this profile — not generic."}\n  ],\n  "candidates":[\n    {"initial":"A","archetype":"Archetype label","why":"Why this profile is worth pursuing — name a specific sector or company type that produces them.","tension":"The single thing to probe in interview.","tags":["Sector","Function","Geography"]},\n    {"initial":"B","archetype":"...","why":"...","tension":"...","tags":["...","..."]},\n    {"initial":"C","archetype":"...","why":"...","tension":"...","tags":["...","..."]},\n    {"initial":"D","archetype":"...","why":"...","tension":"...","tags":["...","..."]},\n    {"initial":"E","archetype":"...","why":"...","tension":"...","tags":["...","..."]}\n  ],\n  "differentiators":[\n    {"num":"01","title":"MANDATE-SPECIFIC SOURCING","body":"Why Meridian 16\'s network is specifically right for this search — not generic capability."},\n    {"num":"02","title":"ASSESSMENT DESIGN","body":"What Meridian 16 tests that a standard interview process misses for this role."},\n    {"num":"03","title":"HUMAN JUDGMENT LAYER","body":"What a senior consultant catches in this brief that AI alone cannot — the nuance that changes the shortlist."}\n  ],\n  "close_quote":"One sentence. The specific cost of the wrong hire for this company at this moment. Not a platitude.",\n  "pfooter_conf":"Confidential. Prepared exclusively for [Company]. Not for distribution. © 2025 Meridian 16."\n}';
+    var qs=await getQuestions(content);
+    prog(20,'Questions ready...');
+    if(qs&&qs.length){
+      renderQuestions(qs);
+      document.getElementById('loading').style.display='none';
+      document.getElementById('questions').style.display='flex';
+    }else{
+      await generate(content,'',currentLinks);
+    }
+  }catch(e){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('intake').style.display='flex';
+    showErr('Error: '+e.message);
+  }
+}
+
+async function getQuestions(brief){
+  var sys='You analyse executive search briefs and identify the most important missing information. Return ONLY valid JSON, no preamble.';
+  var prompt='Read this executive search brief and identify the 3-5 most important gaps that would significantly affect proposal quality. Focus on: reporting line, comp budget, timeline pressure, board vs internal candidate dynamic, previous search history, specific must-have vs nice-to-have criteria, key stakeholders.\n\nBRIEF:\n'+brief+'\n\nReturn JSON:\n{"questions":[{"q":"The specific question","why":"One sentence — why this gap matters for the proposal","field":"short_id"}]}\n\nIf the brief is comprehensive and has no significant gaps, return: {"questions":[]}';
+  var resp=await callAPI({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:prompt}]});
+  var raw=''; for(var b of resp.content){if(b.type==='text')raw+=b.text;}
+  var clean=raw.replace(/```json|```/g,'').trim();
+  try{var d=JSON.parse(clean);return d.questions||[];}catch(e){return[];}
+}
+
+function renderQuestions(qs){
+  document.getElementById('q-progress').textContent=qs.length+' question'+(qs.length>1?'s':'')+' — answer what you know, skip the rest';
+  document.getElementById('q-intro').textContent='These gaps in your brief affect the proposal. Fill in what you can.';
+  document.getElementById('q-items').innerHTML=qs.map(function(q,i){
+    return'<div class="q-item" id="qi'+i+'">'+
+      '<div class="q-text">'+esc(q.q)+'</div>'+
+      '<div class="q-why">Why this matters: '+esc(q.why)+'</div>'+
+      '<textarea id="qa'+i+'" style="min-height:70px;" placeholder="Your answer (or leave blank to skip)..."></textarea>'+
+    '</div>'+(i<qs.length-1?'<div class="q-divider"></div>':'');
+  }).join('');
+  window._questions=qs;
+}
+
+async function submitAnswers(){
+  var qs=window._questions||[];
+  var answers=qs.map(function(q,i){
+    var val=document.getElementById('qa'+i)?document.getElementById('qa'+i).value.trim():'';
+    return val?q.q+'\nAnswer: '+val:'';
+  }).filter(function(a){return a;}).join('\n\n');
+  document.getElementById('questions').style.display='none';
+  document.getElementById('loading').style.display='flex';
+  await generate(currentBrief,answers,currentLinks);
+}
+
+function skipAll(){
+  document.getElementById('questions').style.display='none';
+  document.getElementById('loading').style.display='flex';
+  generate(currentBrief,'',currentLinks);
+}
+
+/* ── GENERATE ── */
+async function generate(brief,answers,links){
+  var steps=[[15,'Searching for live market data...'],[28,'Enriching company context...'],[42,'Mapping talent landscape...'],[55,'Building competency framework...'],[68,'Constructing failure modes...'],[78,'Benchmarking compensation...'],[88,'Drafting proposal narrative...'],[96,'Running blind spot analysis...']];
+  var si=0,iv=setInterval(function(){if(si<steps.length){prog(steps[si][0],steps[si][1]);si++;}},1400);
+  try{
+    var lsec=links.length>0?'\n\nSOURCE LINKS — extract specific facts, reference press by outlet and date:\n'+links.map(function(l){return'- ['+l.type.toUpperCase()+'] '+l.url+(l.note?' ('+l.note+')':'');}).join('\n'):'';
+    var answerSec=answers?'\n\nADDITIONAL CONTEXT (provided by consultant):\n'+answers:'';
+    var sys='You are a senior search intelligence consultant at Meridian 16. You write executive search proposals at the standard of McKinsey Quarterly.\n\nRules: No em dashes. No sentences under 8 words as standalone paragraphs. No passive voice where active works. Insight before assertion. Specificity over generality — use numbers, name companies, cite dates.\n\nBanned words: delve, game-changer, unlock, leverage (verb), transformative, cutting-edge, harness, navigating, robust, seamless, unprecedented, pivotal, mission-critical, in today\'s landscape, rapidly evolving.\n\nReturn ONLY valid JSON. No markdown, no preamble.';
+    var prompt='Generate a complete intelligence-grade Meridian 16 proposal. Synthesise where facts are missing — flag with (est.). Use web search tool to find current company info, recent news, and market data before generating.\n\nMANDATE:\n'+brief+lsec+answerSec+'\n\nReturn this exact JSON:\n{\n"company":"","role":"","hero_title":"THE [COMPANY] [ROLE]: [SHARP IMPLICATION]. All caps. Specific. Max 12 words.","hero_sub":"One sentence — what this covers and who prepared it.","hero_meta":[{"label":"Company","value":""},{"label":"Role","value":""},{"label":"Mandate Type","value":"Retained Executive Search"},{"label":"Prepared By","value":"Meridian 16"}],"stats":[{"num":"","label":"","ctx":"What this means for the search"},{"num":"","label":"","ctx":""},{"num":"","label":"","ctx":""},{"num":"","label":"","ctx":""}],"s1_head":"WHAT CHANGED AND WHEN (all caps, name the event)","s1_body":"3-4 sentences. Specific inflection point. This company, this moment.","s1_pull":"One sentence a board member would quote — specific implication not platitude.","s1_pull_src":"Source attribution","s2_head":"THE COST OF NOT ACTING (all caps, max 9 words)","s2_body":"2-3 sentences. Quantify at least one consequence.","forces":{"push_head":"Accelerants","push_items":[{"text":"Named competitor/metric/deadline"},{"text":"Regulatory or market pressure"},{"text":"Board or investor pressure"}],"pull_head":"Constraints","pull_items":[{"text":"Specific talent scarcity with number"},{"text":"Compensation or geography tension"},{"text":"Organisational complexity"}]},"s3_head":"WHERE THE TALENT ACTUALLY SITS","s3_body":"2-3 sentences naming specific sectors and why the obvious pools are wrong.","chart_title":"CANDIDATE POOL RELEVANCE BY SECTOR","market_bars":[{"label":"Primary sector","value":88,"note":"Why this is the primary pool"},{"label":"","value":65,"note":""},{"label":"","value":48,"note":""},{"label":"","value":30,"note":""},{"label":"Obvious but wrong","value":14,"note":"Why this pool fails"}],"matrix_title":"TALENT POOL ASSESSMENT MATRIX","talent_matrix":[{"pool":"","depth":"High","comp_fit":"High","culture_risk":"Low","timeline":"4-6 wks","note":""},{"pool":"","depth":"Medium","comp_fit":"High","culture_risk":"Medium","timeline":"6-8 wks","note":""},{"pool":"","depth":"Medium","comp_fit":"Medium","culture_risk":"Low","timeline":"6-8 wks","note":""},{"pool":"","depth":"Low","comp_fit":"Low","culture_risk":"High","timeline":"8-10 wks","note":""}],"comp_intro":"2 sentences on compensation positioning for this role and market.","comp_data":[{"geo":"","level":"P25","base":"","bonus":"","equity":"","total":""},{"geo":"","level":"Median","base":"","bonus":"","equity":"","total":""},{"geo":"","level":"P75","base":"","bonus":"","equity":"","total":""},{"geo":"","level":"Top Decile","base":"","bonus":"","equity":"","total":""}],"comp_note":"Methodology note — e.g. based on Meridian 16 placement data and public benchmarks. Flag estimates.","s4_head":"THE THREE THINGS THAT MUST ALL BE TRUE","s4_body":"2-3 sentences. Name the specific combination that does not exist at volume.","radar_note":"Where Meridian 16 looks that others miss — one specific sentence.","radar_axes":[{"label":"Competency 1","ideal":92,"typical":50},{"label":"Competency 2","ideal":85,"typical":68},{"label":"Competency 3","ideal":90,"typical":35},{"label":"Competency 4","ideal":78,"typical":62},{"label":"Competency 5","ideal":82,"typical":54}],"s5_head":"WHAT GOES WRONG IN THIS SEARCH","s5_body":"1-2 sentences. The structural reason wrong hires happen here.","wrong_archetypes":[{"name":"","why_attractive":"Why they look right on paper","why_wrong":"The precise failure mode","signals":["Resume signal","Interview signal","Reference check signal"]},{"name":"","why_attractive":"","why_wrong":"","signals":["","",""]}],"right_archetype":{"name":"The Profile That Works","description":"2-3 sentences on track record, not character.","signals":["What they have built","Decision under pressure","Stakeholder credibility signal"]},"s6_head":"FROM MANDATE TO PLACEMENT","s6_body":"1-2 sentences on what is non-standard about this process.","phases":[{"name":"Deep Brief","week":"Week 1","desc":"What the brief phase must surface that standard intake misses."},{"name":"Market Map","week":"Weeks 1-2","desc":"Specific sectors and companies mapped first and why."},{"name":"Assessment","week":"Weeks 2-4","desc":"Specific competency tests for this profile."},{"name":"Shortlist","week":"Week 5","desc":"What a calibrated slate looks like here."},{"name":"Close","week":"Weeks 6-10","desc":"Specific offer-stage risks for this profile."}],"candidates":[{"initial":"A","archetype":"","why":"Specific sector or company type.","tension":"The single probe.","tags":["","",""]},{"initial":"B","archetype":"","why":"","tension":"","tags":["",""]},{"initial":"C","archetype":"","why":"","tension":"","tags":["",""]},{"initial":"D","archetype":"","why":"","tension":"","tags":["",""]},{"initial":"E","archetype":"","why":"","tension":"","tags":["",""]}],"differentiators":[{"num":"01","title":"MANDATE-SPECIFIC SOURCING","body":"Why Meridian 16 network is specifically right."},{"num":"02","title":"ASSESSMENT DESIGN","body":"What gets tested that standard process misses."},{"num":"03","title":"HUMAN JUDGMENT LAYER","body":"What a consultant catches that AI alone cannot."}],"close_quote":"One sentence. The specific cost of the wrong hire at this company now.","pfooter_conf":"Confidential. Prepared exclusively for [Company]. Not for distribution. © 2025 Meridian 16.","blindspots":[{"level":"warn","label":"Assumption","text":"What was assumed and might be wrong"},{"level":"info","label":"Missing Data","text":"What additional data would sharpen this section"},{"level":"warn","label":"Estimate","text":"Which numbers are estimates and why"}]\n}';
+
     var msgContent;
     if(fileData&&fileData.type==='pdf'){msgContent=[{type:'document',source:{type:'base64',media_type:'application/pdf',data:fileData.data}},{type:'text',text:prompt}];}
     else{msgContent=prompt;}
-    var resp=await fetch('https://caldwell-brief-proxy.caldwellbriefs.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:7000,system:sys,messages:[{role:'user',content:msgContent}]})});
-    var data=await resp.json();
-    if(!resp.ok||data.error)throw new Error(data.error&&data.error.message?data.error.message:'API error');
+
+    var resp=await callAPI({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:8000,
+      system:sys,
+      tools:[{type:'web_search_20250305',name:'web_search'}],
+      messages:[{role:'user',content:msgContent}]
+    });
+
     clearInterval(iv); prog(100,'Rendering...');
-    var raw=''; for(var b of data.content){if(b.type==='text')raw+=b.text;}
+    var raw=''; for(var b of resp.content){if(b.type==='text')raw+=b.text;}
     var clean=raw.replace(/```json|```/g,'').trim(), d;
-    try{d=JSON.parse(clean);}catch(e){var m=clean.match(/\{[\s\S]*\}/);if(m)d=JSON.parse(m[0]);else throw new Error('JSON parse failed');}
+    try{d=JSON.parse(clean);}catch(e){var m=clean.match(/\{[\s\S]*\}/);if(m)d=JSON.parse(m[0]);else throw new Error('Could not parse response');}
+    currentData=d;
+    saveToHistory(d);
     await new Promise(function(r){setTimeout(r,250);});
     render(d);
   }catch(err){
@@ -575,83 +856,117 @@ async function generate(){
   }
 }
 
-/* RENDER */
+async function callAPI(body){
+  var resp=await fetch('https://caldwell-brief-proxy.caldwellbriefs.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  var data=await resp.json();
+  if(!resp.ok||data.error)throw new Error(data.error&&data.error.message?data.error.message:'API error');
+  return data;
+}
+
+/* ── RENDER ── */
 function render(d){
+  /* PRINT COVER */
+  var cvTitle=document.getElementById('cv-title');
+  if(cvTitle)cvTitle.textContent=d.hero_title||'Executive Search Proposal';
+  var cvMeta=document.getElementById('cv-meta');
+  if(cvMeta)cvMeta.innerHTML=(d.hero_meta||[]).map(function(m){return'<div><div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:Barlow Condensed,sans-serif;margin-bottom:2px;">'+esc(m.label)+'</div><div style="font-size:12px;color:rgba(255,255,255,.7);">'+esc(m.value)+'</div></div>';}).join('');
+
   /* HERO */
-  document.getElementById('ph-title').innerHTML=esc(d.hero_title||'Executive Search Proposal');
-  set('ph-sub',d.hero_sub);
+  setEdit('ph-title',d.hero_title||'Executive Search Proposal');
+  setEdit('ph-sub',d.hero_sub||'');
   document.getElementById('ph-meta').innerHTML=(d.hero_meta||[]).map(function(m){return'<div class="mi"><div class="mi-l">'+esc(m.label)+'</div><div class="mi-v">'+esc(m.value)+'</div></div>';}).join('');
+
   /* STATS */
-  document.getElementById('stat-row').innerHTML=(d.stats||[]).map(function(s){
-    return'<div class="stat-block"><div class="stat-num" data-val="'+esc(s.num)+'">'+esc(s.num)+'</div><div class="stat-lbl">'+esc(s.label)+'</div>'+(s.ctx?'<div class="stat-ctx">'+esc(s.ctx)+'</div>':'')+'</div>';
-  }).join('');
+  document.getElementById('stat-row').innerHTML=(d.stats||[]).map(function(s){return'<div class="stat-block"><div class="stat-num" data-val="'+esc(s.num)+'">'+esc(s.num)+'</div><div class="stat-lbl">'+esc(s.label)+'</div>'+(s.ctx?'<div class="stat-ctx">'+esc(s.ctx)+'</div>':'')+'</div>';}).join('');
+
   /* S1 */
-  set('s1-head',d.s1_head); setHTML('s1-body',d.s1_body);
-  if(d.s1_pull){document.getElementById('s1-pull').style.display='block';set('s1-pull-txt',d.s1_pull);set('s1-pull-src',d.s1_pull_src||'Meridian 16 Analysis');}
+  setEdit('s1-head',d.s1_head||'');
+  setEdit('s1-body',d.s1_body||'');
+  if(d.s1_pull){document.getElementById('s1-pull').style.display='block';setEdit('s1-pull-txt',d.s1_pull);setEdit('s1-pull-src',d.s1_pull_src||'Meridian 16 Analysis');}
+
   /* S2 */
-  set('s2-head',d.s2_head); setHTML('s2-body',d.s2_body);
+  setEdit('s2-head',d.s2_head||'');
+  setEdit('s2-body',d.s2_body||'');
   if(d.forces){
     document.getElementById('ff').innerHTML=
       '<div class="ff-col"><div class="ff-hd push">'+esc(d.forces.push_head||'Accelerants')+'</div>'+(d.forces.push_items||[]).map(function(i){return'<div class="ff-item"><div class="ff-dot push"></div><div>'+esc(i.text)+'</div></div>';}).join('')+'</div>'+
       '<div class="ff-col"><div class="ff-hd pull">'+esc(d.forces.pull_head||'Constraints')+'</div>'+(d.forces.pull_items||[]).map(function(i){return'<div class="ff-item"><div class="ff-dot pull"></div><div>'+esc(i.text)+'</div></div>';}).join('')+'</div>';
   }
+
   /* S3 */
-  set('s3-head',d.s3_head); setHTML('s3-body',d.s3_body);
-  if(d.market_bars&&d.market_bars.length){
-    document.getElementById('chart-area').innerHTML='<div class="chart-lbl">'+esc(d.chart_title||'CANDIDATE POOL RELEVANCE')+'</div>'+buildBar(d.market_bars);
+  setEdit('s3-head',d.s3_head||'');
+  setEdit('s3-body',d.s3_body||'');
+  if(d.market_bars&&d.market_bars.length){document.getElementById('chart-area').innerHTML='<div class="chart-lbl">'+esc(d.chart_title||'CANDIDATE POOL RELEVANCE')+'</div>'+buildBar(d.market_bars);}
+  if(d.talent_matrix&&d.talent_matrix.length){document.getElementById('matrix-lbl').textContent=d.matrix_title||'TALENT POOL ASSESSMENT';document.getElementById('matrix-wrap').innerHTML=buildMatrix(d.talent_matrix);}
+  /* COMP */
+  if(d.comp_data&&d.comp_data.length){
+    document.getElementById('comp-section').style.display='block';
+    document.getElementById('comp-intro').textContent=d.comp_intro||'';
+    document.getElementById('comp-table-wrap').innerHTML=buildComp(d.comp_data,d.role,d.company);
+    document.getElementById('comp-note').textContent=d.comp_note||'Meridian 16 analysis. All figures in local currency. Estimates flagged (est.).';
   }
-  if(d.talent_matrix&&d.talent_matrix.length){
-    set('matrix-lbl',d.matrix_title||'TALENT POOL ASSESSMENT MATRIX');
-    document.getElementById('matrix-wrap').innerHTML=buildMatrix(d.talent_matrix);
-  }
+
   /* S4 */
-  set('s4-head',d.s4_head); setHTML('s4-body',d.s4_body);
+  setEdit('s4-head',d.s4_head||'');
+  setEdit('s4-body',d.s4_body||'');
   if(d.radar_axes&&d.radar_axes.length){document.getElementById('radar-wrap').innerHTML=buildRadar(d.radar_axes,d.radar_note);}
+
   /* S5 */
-  set('s5-head',d.s5_head); setHTML('s5-body',d.s5_body);
+  setEdit('s5-head',d.s5_head||'');
+  setEdit('s5-body',d.s5_body||'');
   var rg='';
-  (d.wrong_archetypes||[]).forEach(function(a){
-    rg+='<div class="risk-card wrong"><span class="risk-tag rt-wrong">Wrong Hire</span><div class="risk-name">'+esc(a.name)+'</div>'+
-      '<div class="risk-body"><strong>Looks right because:</strong> '+esc(a.why_attractive)+'</div>'+
-      '<div class="risk-body" style="margin-top:.35rem;"><strong>Fails because:</strong> '+esc(a.why_wrong)+'</div>'+
-      (a.signals?'<div class="risk-sigs"><div class="risk-sig-lbl">Detection Signals</div>'+a.signals.map(function(s){return'<div class="risk-sig">— '+esc(s)+'</div>';}).join('')+'</div>':'')+'</div>';
-  });
-  if(d.right_archetype){
-    rg+='<div class="risk-card right"><span class="risk-tag rt-right">Right Hire</span><div class="risk-name">'+esc(d.right_archetype.name)+'</div>'+
-      '<div class="risk-body">'+esc(d.right_archetype.description)+'</div>'+
-      (d.right_archetype.signals?'<div class="risk-sigs"><div class="risk-sig-lbl">Positive Signals</div>'+d.right_archetype.signals.map(function(s){return'<div class="risk-sig">+ '+esc(s)+'</div>';}).join('')+'</div>':'')+'</div>';
-  }
+  (d.wrong_archetypes||[]).forEach(function(a){rg+='<div class="risk-card wrong"><span class="risk-tag rt-w">Wrong Hire</span><div class="risk-name">'+esc(a.name)+'</div><div class="risk-body"><strong>Looks right because:</strong> '+esc(a.why_attractive)+'</div><div class="risk-body" style="margin-top:.35rem;"><strong>Fails because:</strong> '+esc(a.why_wrong)+'</div>'+(a.signals?'<div class="risk-sigs"><div class="rs-lbl">Detection Signals</div>'+a.signals.map(function(s){return'<div class="rs-sig">— '+esc(s)+'</div>';}).join('')+'</div>':'')+'</div>';});
+  if(d.right_archetype){rg+='<div class="risk-card right"><span class="risk-tag rt-r">Right Hire</span><div class="risk-name">'+esc(d.right_archetype.name)+'</div><div class="risk-body">'+esc(d.right_archetype.description)+'</div>'+(d.right_archetype.signals?'<div class="risk-sigs"><div class="rs-lbl">Positive Signals</div>'+d.right_archetype.signals.map(function(s){return'<div class="rs-sig">+ '+esc(s)+'</div>';}).join('')+'</div>':'')+'</div>';}
   document.getElementById('risk-grid').innerHTML=rg;
+
   /* S6 */
-  set('s6-head',d.s6_head); setHTML('s6-body',d.s6_body);
+  setEdit('s6-head',d.s6_head||'');
+  setEdit('s6-body',d.s6_body||'');
   document.getElementById('tl-wrap').innerHTML=buildTL(d.phases||[]);
-  set('cand-lbl','Initial Candidate Landscape — '+(d.role||'Search')+' at '+(d.company||''));
-  document.getElementById('cand-grid').innerHTML=(d.candidates||[]).map(function(c){
-    return'<div class="cand"><div class="cand-init">'+esc(c.initial)+'</div><div class="cand-type">'+esc(c.archetype)+'</div><div class="cand-why">'+esc(c.why)+'</div>'+(c.tension?'<div class="cand-why" style="margin-top:.3rem;"><strong>Probe:</strong> '+esc(c.tension)+'</div>':'')+'<div style="margin-top:.45rem;">'+(c.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>';}).join('')+'</div></div>';
-  }).join('');
-  document.getElementById('diff-row').innerHTML=(d.differentiators||[]).map(function(df){
-    return'<div class="diff-block"><div class="diff-stripe"></div><div class="diff-n">'+esc(df.num)+'</div><div class="diff-t">'+esc(df.title)+'</div><div class="diff-b">'+esc(df.body)+'</div></div>';
-  }).join('');
+  document.getElementById('cand-lbl').textContent='Initial Candidate Landscape — '+(d.role||'Search')+' at '+(d.company||'');
+  document.getElementById('cand-grid').innerHTML=(d.candidates||[]).map(function(c){return'<div class="cand"><div class="cand-init">'+esc(c.initial)+'</div><div class="cand-type">'+esc(c.archetype)+'</div><div class="cand-why">'+esc(c.why)+'</div>'+(c.tension?'<div class="cand-why" style="margin-top:.3rem;"><strong>Probe:</strong> '+esc(c.tension)+'</div>':'')+'<div style="margin-top:.45rem;">'+(c.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>';}).join('')+'</div></div>';}).join('');
+  document.getElementById('diff-row').innerHTML=(d.differentiators||[]).map(function(df){return'<div class="diff-block"><div class="diff-stripe"></div><div class="diff-n">'+esc(df.num)+'</div><div class="diff-t">'+esc(df.title)+'</div><div class="diff-b">'+esc(df.body)+'</div></div>';}).join('');
+
   /* CTA */
-  var nm=cName||'Meridian 16', em=cEmail||'hello@meridian16.org';
-  set('cta-name',nm); set('cta-email-ln',em); set('cta-quote',d.close_quote||'');
-  set('pfooter-conf',d.pfooter_conf||'Confidential. Prepared exclusively for '+(d.company||'[Client]')+'. Not for distribution. © 2025 Meridian 16.');
-  var subj=encodeURIComponent((d.company||'')+(d.role?' — '+d.role:'')+'  Meridian 16 Proposal');
+  var nm=cName||'Meridian 16',em=cEmail||'hello@meridian16.org';
+  setEdit('cta-name',nm); setEdit('cta-email-ln',em); setEdit('cta-quote',d.close_quote||'');
+  document.getElementById('pfooter-conf').textContent=d.pfooter_conf||'Confidential. Prepared exclusively for '+(d.company||'[Client]')+'. Not for distribution. © 2025 Meridian 16.';
+  var subj=encodeURIComponent((d.company||'')+(d.role?' — '+d.role:'')+' — Meridian 16 Proposal');
   document.getElementById('cta-link').href='mailto:'+em+'?subject='+subj;
   document.getElementById('nav-cta').onclick=function(){window.location.href='mailto:'+em+'?subject='+subj;};
+
+  /* BLIND SPOTS */
+  renderBlindSpots(d.blindspots||[]);
+
   document.getElementById('loading').style.display='none';
   document.getElementById('proposal').style.display='block';
   window.scrollTo(0,0);
   initScroll();
 }
 
-/* DATA VIZ */
+/* ── BLIND SPOTS ── */
+function renderBlindSpots(items){
+  if(!items||!items.length)return;
+  var panel=document.getElementById('blindspot-panel');
+  panel.style.display='block';
+  document.getElementById('bs-count').textContent=items.length+' flag'+(items.length>1?'s':'');
+  document.getElementById('bs-body').innerHTML=items.map(function(b){
+    return'<div class="bs-item"><div><div class="bs-label '+b.level+'">'+esc(b.label)+'</div><div class="bs-dot '+b.level+'" style="display:none;"></div><div>'+esc(b.text)+'</div></div></div>';
+  }).join('');
+}
+function toggleBS(){
+  var body=document.getElementById('bs-body'),toggle=document.getElementById('bs-toggle');
+  body.classList.toggle('open');
+  toggle.textContent=body.classList.contains('open')?'Hide ↑':'Show ↓';
+}
+
+/* ── DATA VIZ ── */
 function buildBar(bars){
   var maxV=Math.max.apply(null,bars.map(function(b){return b.value;}));
-  var rH=44,lW=160,bMax=360,h=bars.length*rH+16;
-  var svg='<svg viewBox="0 0 '+(lW+bMax+80)+' '+h+'" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;">';
+  var rH=44,lW=155,bMax=350,h=bars.length*rH+12;
+  var svg='<svg viewBox="0 0 '+(lW+bMax+80)+' '+h+'" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px;">';
   bars.forEach(function(b,i){
-    var y=i*rH+6, bw=Math.round((b.value/maxV)*bMax);
+    var y=i*rH+4,bw=Math.round((b.value/maxV)*bMax);
     var fill=i===0?'#0A4FC4':(b.value>maxV*.6?'#3D72D4':(b.value>maxV*.35?'#7AA3E8':'#BAD0F5'));
     svg+='<text x="'+(lW-8)+'" y="'+(y+14)+'" text-anchor="end" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="700" fill="#374D64">'+esc(b.label)+'</text>';
     svg+='<rect x="'+lW+'" y="'+y+'" width="'+bw+'" height="20" fill="'+fill+'"/>';
@@ -662,11 +977,18 @@ function buildBar(bars){
 }
 
 function buildMatrix(rows){
-  var dotMap={'High':'<span class="dot-green"></span>','Medium':'<span class="dot-amber"></span>','Low':'<span class="dot-red"></span>'};
-  var rdot={'Low':'<span class="dot-green"></span>','Medium':'<span class="dot-amber"></span>','High':'<span class="dot-red"></span>'};
-  var h='<table class="matrix"><thead><tr><th>Talent Pool</th><th>Pool Depth</th><th>Comp Fit</th><th>Culture Risk</th><th>Est. Timeline</th><th>Assessment</th></tr></thead><tbody>';
-  rows.forEach(function(r){
-    h+='<tr><td>'+esc(r.pool)+'</td><td>'+(dotMap[r.depth]||'')+'&nbsp;'+esc(r.depth)+'</td><td>'+(dotMap[r.comp_fit]||'')+'&nbsp;'+esc(r.comp_fit)+'</td><td>'+(rdot[r.culture_risk]||'')+'&nbsp;'+esc(r.culture_risk)+'</td><td>'+esc(r.timeline)+'</td><td style="font-size:11px;">'+esc(r.note)+'</td></tr>';
+  var dmap={'High':'<span class="dot-g"></span>High','Medium':'<span class="dot-a"></span>Medium','Low':'<span class="dot-r"></span>Low'};
+  var rmap={'Low':'<span class="dot-g"></span>Low','Medium':'<span class="dot-a"></span>Medium','High':'<span class="dot-r"></span>High'};
+  var h='<table class="matrix"><thead><tr><th>Talent Pool</th><th>Pool Depth</th><th>Comp Fit</th><th>Culture Risk</th><th>Timeline</th><th>Assessment</th></tr></thead><tbody>';
+  rows.forEach(function(r){h+='<tr><td>'+esc(r.pool)+'</td><td>'+(dmap[r.depth]||esc(r.depth))+'</td><td>'+(dmap[r.comp_fit]||esc(r.comp_fit))+'</td><td>'+(rmap[r.culture_risk]||esc(r.culture_risk))+'</td><td>'+esc(r.timeline)+'</td><td style="font-size:11px;">'+esc(r.note)+'</td></tr>';});
+  return h+'</tbody></table>';
+}
+
+function buildComp(rows,role,company){
+  var h='<table class="comp-table"><thead><tr><th>Geography</th><th>Percentile</th><th>Base Salary</th><th>Bonus</th><th>Equity / LTI</th><th>Total Compensation</th></tr></thead><tbody>';
+  rows.forEach(function(r,i){
+    var cls=i===1?'comp-highlight':'';
+    h+='<tr><td>'+esc(r.geo)+'</td><td class="'+cls+'">'+esc(r.level)+'</td><td>'+esc(r.base)+'</td><td>'+esc(r.bonus)+'</td><td>'+esc(r.equity)+'</td><td class="'+cls+'">'+esc(r.total)+'</td></tr>';
   });
   return h+'</tbody></table>';
 }
@@ -675,32 +997,24 @@ function buildRadar(axes,note){
   var cx=145,cy=145,r=105,n=axes.length;
   function pt(val,idx){var a=(Math.PI*2*idx/n)-Math.PI/2,d=(val/100)*r;return{x:cx+d*Math.cos(a),y:cy+d*Math.sin(a)};}
   var svg='<svg viewBox="0 0 290 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:270px;flex-shrink:0;">';
-  [25,50,75,100].forEach(function(ring){
-    var pts=axes.map(function(_,i){return pt(ring,i);});
-    svg+='<polygon points="'+pts.map(function(p){return p.x+','+p.y;}).join(' ')+'" fill="none" stroke="#D8E2EC" stroke-width="1"/>';
-  });
+  [25,50,75,100].forEach(function(ring){var pts=axes.map(function(_,i){return pt(ring,i);});svg+='<polygon points="'+pts.map(function(p){return p.x+','+p.y;}).join(' ')+'" fill="none" stroke="#D8E2EC" stroke-width="1"/>';});
   axes.forEach(function(_,i){var p=pt(100,i);svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p.x+'" y2="'+p.y+'" stroke="#D8E2EC" stroke-width="1"/>';});
   var tpts=axes.map(function(a,i){return pt(a.typical,i);});
   svg+='<polygon points="'+tpts.map(function(p){return p.x+','+p.y;}).join(' ')+'" fill="rgba(107,126,148,.1)" stroke="#6B7E94" stroke-width="1.5"/>';
   var ipts=axes.map(function(a,i){return pt(a.ideal,i);});
   svg+='<polygon points="'+ipts.map(function(p){return p.x+','+p.y;}).join(' ')+'" fill="rgba(10,79,196,.09)" stroke="#0A4FC4" stroke-width="2"/>';
-  axes.forEach(function(a,i){var lp=pt(115,i);svg+='<text x="'+lp.x+'" y="'+lp.y+'" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" fill="#2A3F56">'+esc(a.label)+'</text>';});
+  axes.forEach(function(a,i){var lp=pt(116,i);svg+='<text x="'+lp.x+'" y="'+lp.y+'" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" fill="#2A3F56">'+esc(a.label)+'</text>';});
   svg+='</svg>';
-  var leg='<div class="radar-legend">'+
-    '<div class="leg-row"><div class="leg-dot" style="background:#0A4FC4;"></div><div><strong style="color:#1C2B3A;">Ideal Profile</strong><br>What this mandate demands</div></div>'+
-    '<div class="leg-row"><div class="leg-dot" style="background:#6B7E94;"></div><div><strong style="color:#1C2B3A;">Typical Senior Candidate</strong><br>Market baseline</div></div>'+
-    (note?'<div style="margin-top:.6rem;font-size:11px;color:#374D64;line-height:1.55;border-left:2px solid #0A4FC4;padding-left:.6rem;">'+esc(note)+'</div>':'')+'</div>';
+  var leg='<div class="radar-legend"><div class="leg-row"><div class="leg-dot" style="background:#0A4FC4;"></div><div><strong style="color:#1C2B3A;">Ideal Profile</strong><br>What this mandate demands</div></div><div class="leg-row"><div class="leg-dot" style="background:#6B7E94;"></div><div><strong style="color:#1C2B3A;">Typical Senior Candidate</strong><br>Market baseline</div></div>'+(note?'<div style="margin-top:.6rem;font-size:11px;color:#374D64;line-height:1.55;border-left:2px solid #0A4FC4;padding-left:.6rem;">'+esc(note)+'</div>':'')+'</div>';
   return'<div class="radar-wrap">'+svg+leg+'</div>';
 }
 
 function buildTL(phases){
-  var nodes=phases.map(function(p,i){
-    return'<div class="tl-phase"><div class="tl-node" id="tn'+i+'"></div><div class="tl-n">'+esc(p.name)+'</div><div class="tl-w">'+esc(p.week)+'</div><div class="tl-d">'+esc(p.desc)+'</div></div>';
-  }).join('');
+  var nodes=phases.map(function(p,i){return'<div class="tl-phase"><div class="tl-node" id="tn'+i+'"></div><div class="tl-n">'+esc(p.name)+'</div><div class="tl-w">'+esc(p.week)+'</div><div class="tl-d">'+esc(p.desc)+'</div></div>';}).join('');
   return'<div class="tl-track" id="tl-track"><div class="tl-line"></div><div class="tl-fill" id="tl-fill"></div>'+nodes+'</div>';
 }
 
-/* SCROLL + ANIMATE */
+/* ── SCROLL ── */
 function initScroll(){
   var secs=document.querySelectorAll('.ps');
   var obs=new IntersectionObserver(function(entries){
@@ -708,7 +1022,7 @@ function initScroll(){
       if(e.isIntersecting){
         e.target.classList.add('vis');
         if(e.target.id==='s6')setTimeout(animTL,300);
-        if(e.target.id==='s1')animateStats();
+        if(e.target.id==='s1')animStats();
       }
     });
   },{threshold:.07});
@@ -721,23 +1035,28 @@ function initScroll(){
     ids.forEach(function(id){var el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<105)active=id;});
     document.querySelectorAll('.pnav-link').forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+active);});
   });
+  /* show edit hint on first focus */
+  var hintShown=false;
+  document.querySelectorAll('[contenteditable]').forEach(function(el){
+    el.addEventListener('focus',function(){
+      if(!hintShown){showToast('Click any text to edit it directly');hintShown=true;}
+    });
+  });
 }
 
-function animateStats(){
+function animStats(){
   document.querySelectorAll('.stat-num').forEach(function(el){
     var raw=el.getAttribute('data-val')||el.textContent;
     var num=parseFloat(raw.replace(/[^0-9.]/g,''));
-    if(isNaN(num))return;
-    var prefix=raw.match(/^[^0-9]*/)[0], suffix=raw.match(/[^0-9.]*$/)[0];
-    var start=0, dur=1200, startT=null;
+    if(isNaN(num)||num===0)return;
+    var prefix=raw.match(/^[^0-9]*/)[0],suffix=raw.match(/[^0-9.]*$/)[0];
+    var dur=1100,startT=null;
     function step(t){
       if(!startT)startT=t;
-      var progress=Math.min((t-startT)/dur,1);
-      var ease=1-Math.pow(1-progress,3);
-      var val=Math.round(num*ease*10)/10;
-      el.textContent=prefix+(Number.isInteger(num)?Math.round(val):val)+suffix;
-      if(progress<1)requestAnimationFrame(step);
-      else el.textContent=raw;
+      var p=Math.min((t-startT)/dur,1),e=1-Math.pow(1-p,3);
+      var v=Math.round(num*e*10)/10;
+      el.textContent=prefix+(Number.isInteger(num)?Math.round(v):v)+suffix;
+      if(p<1)requestAnimationFrame(step); else el.textContent=raw;
     }
     requestAnimationFrame(step);
   });
@@ -750,14 +1069,19 @@ function animTL(){
   track.querySelectorAll('.tl-node').forEach(function(n,i){setTimeout(function(){n.classList.add('on');},i*150);});
 }
 
-function back(){document.getElementById('proposal').style.display='none';document.getElementById('intake').style.display='flex';window.scrollTo(0,0);}
+/* ── HELPERS ── */
+function back(){document.getElementById('proposal').style.display='none';document.getElementById('intake').style.display='flex';window.scrollTo(0,0);renderHistory();}
 function toggleMob(){document.getElementById('mob-nav').classList.toggle('open');}
 function closeMob(){document.getElementById('mob-nav').classList.remove('open');}
-function set(id,val){var el=document.getElementById(id);if(el&&val)el.textContent=val;}
-function setHTML(id,val){var el=document.getElementById(id);if(el&&val)el.innerHTML=esc(val).replace(/\n/g,'<br>');}
+function setEdit(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function showErr(m){var e=document.getElementById('err');e.textContent=m;e.style.display='block';}
-function hideErr(){document.getElementById('err').style.display='none';}
+function showErr(m){var e=document.getElementById('err');if(e){e.textContent=m;e.style.display='block';}}
+function hideErr(){var e=document.getElementById('err');if(e)e.style.display='none';}
+
+/* ── INIT ── */
+window.addEventListener('DOMContentLoaded',function(){
+  if(!checkShareParam())renderHistory();
+});
 </script>
 </body>
 </html>
