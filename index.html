@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian 16 — Proposal Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0A0F1A;
+  --slate: #1C2535;
+  --mid: #2E3D52;
+  --silver: #6B7A8D;
+  --rule: #E2E7EF;
+  --paper: #F5F7FA;
+  --white: #FFFFFF;
+  --accent: #0F52BA;
+  --accent-light: #EEF3FC;
+  --lime: #3ECF8E;
+  --red: #C0392B;
+  --gold: #D4AC0D;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--ink);color:var(--white);min-height:100vh;}
+
+/* ─── INPUT ─── */
+#input-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1rem;background:var(--ink);}
+
+.m-logo{display:flex;align-items:center;gap:10px;margin-bottom:2.25rem;}
+.m-logo-mark{width:28px;height:28px;background:var(--accent);display:flex;align-items:center;justify-content:center;}
+.m-logo-mark svg{width:14px;height:14px;}
+.m-logo-text{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--white);}
+.m-logo-text span{color:var(--accent);opacity:.7;}
+
+.m-sub{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--silver);margin-bottom:.5rem;text-align:center;}
+.m-head{font-family:'Barlow Condensed',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:700;text-transform:uppercase;text-align:center;line-height:1.05;margin-bottom:.6rem;max-width:560px;}
+.m-head em{color:var(--accent);font-style:normal;}
+.m-desc{font-size:13px;color:var(--silver);text-align:center;margin-bottom:2.5rem;max-width:420px;line-height:1.6;}
+
+.card{background:#111827;border:1px solid #1E2D40;width:100%;max-width:640px;padding:1.75rem;}
+
+label{display:block;font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--silver);margin-bottom:.4rem;}
+label .opt{color:#243040;font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;}
+textarea,input[type=text],input[type=email],input[type=url]{width:100%;background:var(--ink);border:1px solid #1E2D40;color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;padding:.6rem .75rem;transition:border-color .2s;}
+textarea{min-height:160px;resize:vertical;line-height:1.65;}
+textarea:focus,input:focus{outline:none;border-color:var(--accent);}
+textarea::placeholder,input::placeholder{color:#2A3A50;}
+
+.upload-zone{border:1px dashed #1E2D40;padding:1.75rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(15,82,186,.05);}
+.up-icon{font-size:24px;color:var(--silver);margin-bottom:.4rem;}
+.up-txt{font-size:12px;color:var(--silver);line-height:1.5;}
+.up-txt strong{color:var(--white);}
+#file-input{display:none;}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.25rem;}
+.field-gap{margin-top:1.25rem;}
+
+.links-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+.add-btn{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:transparent;border:1px solid #1E2D40;color:var(--silver);padding:3px 10px;cursor:pointer;transition:all .2s;}
+.add-btn:hover{border-color:var(--accent);color:var(--accent);}
+.link-row{display:grid;grid-template-columns:88px 1fr 1fr auto;gap:5px;margin-bottom:5px;align-items:center;}
+.link-row select{background:var(--ink);border:1px solid #1E2D40;color:var(--silver);font-family:'Barlow',sans-serif;font-size:12px;padding:.48rem .4rem;}
+.link-row select:focus{outline:none;border-color:var(--accent);}
+.link-del{background:transparent;border:1px solid #1E2D40;color:var(--silver);font-size:14px;padding:.4rem .55rem;cursor:pointer;transition:all .2s;}
+.link-del:hover{border-color:var(--red);color:var(--red);}
+.links-empty{font-size:11px;color:#2A3A50;padding:.4rem 0;}
+
+.gen-btn{width:100%;margin-top:1.5rem;background:var(--accent);border:none;color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.95rem;cursor:pointer;transition:background .2s;}
+.gen-btn:hover{background:#0A3F94;}
+.err{font-size:12px;color:#E24B4A;margin-top:.6rem;display:none;}
+
+/* ─── LOADING ─── */
+#loading-screen{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:1.25rem;background:var(--ink);}
+.l-mark{width:24px;height:24px;background:var(--accent);animation:pulse .9s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.75);}}
+.l-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:3px;}
+.l-status{font-size:12px;color:var(--silver);}
+.prog-track{width:200px;height:1px;background:#1E2D40;}
+.prog-fill{height:100%;background:var(--accent);width:0%;transition:width .5s ease;}
+
+/* ─── SITE ─── */
+#site-screen{display:none;background:var(--white);color:var(--ink);}
+
+/* NAV */
+.s-nav{position:fixed;top:0;left:0;right:0;height:54px;background:var(--slate);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;border-bottom:1px solid #243040;}
+.nav-prog{position:absolute;top:0;left:0;height:2px;background:var(--lime);width:0%;transition:width .1s linear;}
+.nav-left{display:flex;align-items:center;gap:1rem;}
+.nav-back{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);padding:3px 8px;cursor:pointer;transition:all .2s;}
+.nav-back:hover{color:var(--white);border-color:var(--white);}
+.nav-logo{display:flex;align-items:center;gap:8px;}
+.nav-logo-mark{width:20px;height:20px;background:var(--accent);display:flex;align-items:center;justify-content:center;}
+.nav-logo-mark svg{width:10px;height:10px;}
+.nav-logo-txt{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--white);}
+.nav-links{display:flex;gap:1.25rem;}
+.nav-link{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none;border-bottom:2px solid transparent;padding-bottom:2px;transition:color .2s;}
+.nav-link:hover,.nav-link.on{color:var(--white);}
+.nav-link.on{border-bottom-color:var(--accent);}
+.nav-actions{display:flex;gap:.6rem;}
+.nav-btn{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border:1px solid rgba(255,255,255,.25);background:transparent;color:var(--white);padding:.3rem .75rem;cursor:pointer;transition:all .2s;}
+.nav-btn:hover{background:rgba(255,255,255,.08);}
+.nav-btn.pri{background:var(--accent);border-color:var(--accent);}
+.nav-btn.pri:hover{background:#0A3F94;}
+.hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:3px;}
+.hamburger span{width:20px;height:2px;background:var(--white);}
+.mob-menu{display:none;position:fixed;top:54px;left:0;right:0;background:var(--slate);z-index:999;padding:.75rem 1.5rem;flex-direction:column;gap:.6rem;border-top:1px solid rgba(255,255,255,.06);}
+.mob-menu.open{display:flex;}
+.mob-menu a{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.65);text-decoration:none;padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,.05);}
+
+/* SECTIONS */
+.sec{padding:5.5rem 2rem 4.5rem;max-width:1060px;margin:0 auto;opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}
+.sec.vis{opacity:1;transform:translateY(0);}
+.sec-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--silver);margin-bottom:.9rem;font-family:'Barlow Condensed',sans-serif;}
+.sec-label .exhibit{color:var(--accent);margin-right:.5rem;}
+.sec-head{font-family:'Barlow Condensed',sans-serif;font-size:clamp(24px,3.2vw,38px);font-weight:700;text-transform:uppercase;color:var(--slate);line-height:1.05;margin-bottom:1.2rem;}
+.sec-head em{color:var(--accent);font-style:normal;}
+.sec-body{font-size:14px;line-height:1.8;color:#3C4E64;max-width:700px;}
+.sec-body strong{color:var(--slate);font-weight:600;}
+.rule{width:100%;height:1px;background:var(--rule);}
+
+/* HERO */
+#s-hero{padding:0;max-width:100%;background:var(--slate);min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(15,82,186,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(15,82,186,.04) 1px,transparent 1px);background-size:52px 52px;}
+.hero-accent{position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--accent);}
+.hero-inner{position:relative;padding:5rem 3rem 4rem;max-width:1060px;margin:0 auto;width:100%;}
+.hero-conf{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--lime);border:1px solid var(--lime);padding:2px 8px;display:inline-block;margin-bottom:1.5rem;opacity:.85;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,5vw,60px);font-weight:700;text-transform:uppercase;color:var(--white);line-height:.98;margin-bottom:1.5rem;max-width:840px;}
+.hero-title em{color:var(--accent);font-style:normal;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.5);max-width:500px;line-height:1.65;margin-bottom:2.5rem;}
+.hero-meta{display:flex;gap:2.25rem;flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-lbl{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--silver);font-family:'Barlow Condensed',sans-serif;}
+.meta-val{font-size:13px;font-weight:500;color:var(--white);}
+
+/* STATS */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:2.5rem 0;}
+.stat-block{background:var(--white);padding:1.5rem 1.25rem;}
+.stat-num{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:700;color:var(--accent);line-height:1;margin-bottom:4px;}
+.stat-lbl{font-size:10px;color:var(--silver);line-height:1.4;font-weight:500;text-transform:uppercase;letter-spacing:.5px;}
+.stat-ctx{font-size:10px;color:var(--accent);margin-top:4px;font-weight:600;}
+
+/* EXHIBIT LABEL */
+.exhibit-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--silver);border-top:1px solid var(--rule);padding-top:.6rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.exhibit-label::before{content:'';display:inline-block;width:12px;height:1px;background:var(--accent);}
+
+/* INSIGHT BOX */
+.insight-box{border-left:3px solid var(--accent);padding:1.1rem 1.4rem;background:var(--accent-light);margin:2rem 0;}
+.insight-box p{font-size:14px;line-height:1.7;color:var(--slate);font-weight:500;}
+.insight-box cite{display:block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--silver);margin-top:.5rem;font-style:normal;}
+
+/* FORCE FIELD */
+.force-field{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:2rem 0;}
+.force-col{background:var(--white);padding:1.6rem;}
+.force-head{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.9rem;}
+.force-head.push{color:var(--accent);}
+.force-head.pull{color:var(--red);}
+.force-item{display:flex;align-items:flex-start;gap:.65rem;margin-bottom:.75rem;font-size:13px;color:#3C4E64;line-height:1.55;}
+.fdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.fdot.push{background:var(--accent);}
+.fdot.pull{background:var(--red);}
+
+/* BAR CHART */
+.chart-wrap{margin:2rem 0;overflow-x:auto;}
+.chart-title{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--silver);margin-bottom:.75rem;}
+
+/* RADAR */
+.radar-wrap{margin:2rem 0;display:flex;align-items:center;gap:2.5rem;flex-wrap:wrap;}
+.radar-legend{display:flex;flex-direction:column;gap:.75rem;min-width:180px;}
+.leg-item{display:flex;align-items:flex-start;gap:.6rem;font-size:12px;color:#3C4E64;line-height:1.45;}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+
+/* RISK MATRIX */
+.risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:2rem 0;}
+.risk-card{background:var(--white);padding:1.6rem;}
+.risk-card.wrong{border-top:2px solid var(--red);}
+.risk-card.right{border-top:2px solid var(--accent);}
+.risk-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:2px 7px;display:inline-block;margin-bottom:.65rem;}
+.risk-tag.wrong{background:#FDF0EF;color:var(--red);}
+.risk-tag.right{background:var(--accent-light);color:var(--accent);}
+.risk-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;color:var(--slate);margin-bottom:.45rem;}
+.risk-desc{font-size:12px;color:#3C4E64;line-height:1.6;}
+.risk-sigs{margin-top:.9rem;}
+.risk-sigs-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--silver);margin-bottom:.35rem;}
+.risk-sig{font-size:12px;color:#3C4E64;padding:.22rem 0;border-bottom:1px solid var(--rule);line-height:1.4;}
+.risk-sig:last-child{border-bottom:none;}
+
+/* DIFFERENTIATORS */
+.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:2rem 0;}
+.diff-block{background:var(--white);padding:1.75rem;position:relative;}
+.diff-accent-bar{position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);}
+.diff-num{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:700;color:rgba(15,82,186,.09);line-height:1;margin-bottom:.35rem;}
+.diff-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;color:var(--slate);margin-bottom:.55rem;}
+.diff-body{font-size:12px;color:#3C4E64;line-height:1.65;}
+
+/* CANDIDATES */
+.cand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:2rem 0;}
+.cand-card{background:var(--white);padding:1.4rem;}
+.cand-init{width:32px;height:32px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--accent);margin-bottom:.8rem;}
+.cand-type{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;color:var(--slate);line-height:1.2;margin-bottom:.35rem;}
+.cand-why{font-size:11px;color:#3C4E64;line-height:1.55;margin-bottom:.6rem;}
+.tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--accent-light);color:var(--accent);padding:2px 5px;display:inline-block;margin-right:3px;margin-top:2px;}
+
+/* TIMELINE */
+.tl-wrap{overflow-x:auto;margin:2rem 0;}
+.tl-track{display:flex;position:relative;min-width:520px;padding-bottom:1rem;}
+.tl-line{position:absolute;top:24px;left:0;right:0;height:1px;background:var(--rule);}
+.tl-prog{position:absolute;top:24px;left:0;height:1px;background:var(--accent);width:0%;transition:width 1.4s ease;}
+.tl-phase{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.tl-node{width:12px;height:12px;border-radius:50%;background:var(--white);border:2px solid var(--rule);position:relative;z-index:1;margin-bottom:.85rem;transition:background .3s,border-color .3s;}
+.tl-node.on{background:var(--accent);border-color:var(--accent);}
+.tl-name{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--slate);text-align:center;margin-bottom:2px;}
+.tl-wk{font-size:9px;color:var(--silver);text-align:center;margin-bottom:4px;}
+.tl-desc{font-size:10px;color:#3C4E64;text-align:center;line-height:1.45;padding:0 .35rem;}
+
+/* CTA */
+#s-close{padding:0;max-width:100%;opacity:1;transform:none;}
+.cta-block{background:var(--accent);padding:4rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.cta-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.35rem;}
+.cta-name{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:.35rem;}
+.cta-line{font-size:12px;color:rgba(255,255,255,.65);margin-bottom:3px;}
+.cta-btn{display:inline-block;margin-top:1.1rem;background:var(--white);color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.65rem 1.5rem;text-decoration:none;transition:background .2s;}
+.cta-btn:hover{background:rgba(255,255,255,.9);}
+.cta-quote{max-width:300px;font-size:13px;color:rgba(255,255,255,.55);line-height:1.65;text-align:right;font-style:italic;}
+.s-footer{background:var(--slate);padding:1.4rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-top:1px solid #243040;}
+.s-footer-conf{font-size:10px;color:rgba(255,255,255,.3);flex:1;text-align:center;}
+.s-footer-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--lime);}
+
+/* PRINT */
+@media print {
+  @page{size:A4 landscape;margin:0;}
+  body{background:white;}
+  #input-screen,#loading-screen{display:none!important;}
+  #site-screen{display:block!important;}
+  .s-nav,.mob-menu,.nav-back,.nav-actions{display:none!important;}
+  .sec{opacity:1!important;transform:none!important;padding:2cm 1.75cm;page-break-after:always;break-after:page;max-width:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
+  #s-hero{min-height:100vh;page-break-after:always;break-after:page;padding:0;}
+  #s-close{page-break-after:avoid;break-after:avoid;}
+  .hero-inner{padding:2.5cm 2cm;}
+  .stat-row,.risk-matrix,.diff-grid,.cand-grid,.force-field{break-inside:avoid;}
+  .tl-prog{width:100%!important;}
+  .tl-node{background:var(--accent)!important;border-color:var(--accent)!important;}
+  .cta-block{background:#0F52BA!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .s-footer{background:#1C2535!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #s-hero{background:#1C2535!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  a{color:inherit!important;text-decoration:none!important;}
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .nav-actions .nav-btn:not(.pri){display:none;}
+  .hero-inner{padding:4rem 1.5rem 3rem;}
+  .hero-title{font-size:28px;}
+  .sec{padding:4rem 1.25rem 3rem;}
+  .row2{grid-template-columns:1fr;}
+  .link-row{grid-template-columns:1fr auto;}
+  .link-row select,.link-row .link-note{display:none;}
+  .risk-matrix{grid-template-columns:1fr;}
+  .diff-grid{grid-template-columns:1fr;}
+  .force-field{grid-template-columns:1fr;}
+  .radar-wrap{flex-direction:column;}
+  .cta-block{flex-direction:column;padding:2.5rem 1.5rem;}
+  .cta-quote{text-align:left;}
+  .s-footer{flex-direction:column;text-align:center;padding:1.5rem;}
+}
+@media(max-width:480px){
+  .stat-row{grid-template-columns:1fr 1fr;}
+  .cand-grid{grid-template-columns:1fr 1fr;}
+  .tl-desc{display:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  .sec{opacity:1!important;transform:none!important;transition:none!important;}
+  .tl-prog{transition:none!important;}
+  .l-mark{animation:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── INPUT ─── -->
+<div id="input-screen">
+  <div class="m-logo">
+    <div class="m-logo-mark">
+      <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 1L13 7L7 13L1 7L7 1Z" fill="white" opacity="0.9"/>
+      </svg>
+    </div>
+    <div class="m-logo-text">MERIDIAN<span>16</span></div>
+  </div>
+  <p class="m-sub">Executive Search Intelligence</p>
+  <h1 class="m-head">Drop a brief.<br><em>Get a proposal.</em></h1>
+  <p class="m-desc">Text your brief, upload a file, or paste the spec. Three hours is the maximum. We start immediately.</p>
+
+  <div class="card">
+    <div style="margin-top:0;">
+      <label for="brief-text">Search Brief <span class="opt">— optional if uploading a file</span></label>
+      <textarea id="brief-text" placeholder="Paste the position spec, client mandate, or background on the search. Include company context, the role, what good looks like, and any candidate considerations. The more detail, the sharper the output."></textarea>
+    </div>
+
+    <div class="field-gap">
+      <label>Attach File <span class="opt">— PDF or DOCX, optional</span></label>
+      <div class="upload-zone" id="upload-zone"
+        onclick="document.getElementById('file-input').click()"
+        ondragover="handleDragOver(event)"
+        ondrop="handleDrop(event)"
+        ondragleave="this.classList.remove('drag')">
+        <div class="up-icon" id="up-icon">↑</div>
+        <div class="up-txt" id="up-txt"><strong>Click to attach</strong> or drag and drop<br>PDF or DOCX, max 10MB</div>
+      </div>
+      <input type="file" id="file-input" accept=".pdf,.docx,.doc,.txt" onchange="handleFileSelect(event)">
+    </div>
+
+    <div class="field-gap">
+      <div class="links-hdr">
+        <label style="margin-bottom:0;">Featured Links <span class="opt">— press, LinkedIn, reports</span></label>
+        <button class="add-btn" onclick="addLink()">+ Add Link</button>
+      </div>
+      <div id="links-container"></div>
+      <div id="links-empty" class="links-empty">No links added. Add press coverage, company pages, or reports to enrich the proposal.</div>
+    </div>
+
+    <div class="row2">
+      <div>
+        <label for="contact-name">Consultant Name</label>
+        <input type="text" id="contact-name" placeholder="e.g. James Whitfield">
+      </div>
+      <div>
+        <label for="contact-email">Contact Email</label>
+        <input type="email" id="contact-email" placeholder="e.g. james@meridian16.org">
+      </div>
+    </div>
+
+    <button class="gen-btn" id="gen-btn" onclick="generateSite()">Generate Proposal</button>
+    <div class="err" id="err-msg"></div>
+  </div>
+</div>
+
+<!-- ─── LOADING ─── -->
+<div id="loading-screen">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="l-mark"></div>
+    <div class="l-label">Meridian 16</div>
+  </div>
+  <div class="l-status" id="l-status">Parsing brief...</div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+</div>
+
+<!-- ─── SITE ─── -->
+<div id="site-screen">
+
+  <nav class="s-nav">
+    <div class="nav-prog" id="nav-prog"></div>
+    <div class="nav-left">
+      <button class="nav-back" onclick="backToInput()">← New Brief</button>
+      <div class="nav-logo">
+        <div class="nav-logo-mark">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M7 1L13 7L7 13L1 7L7 1Z" fill="white" opacity="0.9"/></svg>
+        </div>
+        <div class="nav-logo-txt">MERIDIAN16</div>
+      </div>
+    </div>
+    <div class="nav-links" id="nav-links">
+      <a href="#s-context" class="nav-link">Context</a>
+      <a href="#s-imperative" class="nav-link">Imperative</a>
+      <a href="#s-landscape" class="nav-link">Landscape</a>
+      <a href="#s-profile" class="nav-link">Profile</a>
+      <a href="#s-risk" class="nav-link">Risk</a>
+      <a href="#s-process" class="nav-link">Process</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="window.print()">Export PDF</button>
+      <button class="nav-btn pri" id="nav-cta">Start Conversation</button>
+    </div>
+    <button class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="mob-menu" id="mob-menu">
+    <a href="#s-context" onclick="closeMob()">Context</a>
+    <a href="#s-imperative" onclick="closeMob()">Imperative</a>
+    <a href="#s-landscape" onclick="closeMob()">Landscape</a>
+    <a href="#s-profile" onclick="closeMob()">Profile</a>
+    <a href="#s-risk" onclick="closeMob()">Risk</a>
+    <a href="#s-process" onclick="closeMob()">Process</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="s-hero" style="padding-top:54px;">
+    <div class="hero-bg"></div>
+    <div class="hero-accent"></div>
+    <div class="hero-inner">
+      <div class="hero-conf">Confidential — For Authorized Review Only</div>
+      <h1 class="hero-title" id="hero-title">Loading...</h1>
+      <p class="hero-sub" id="hero-sub"></p>
+      <div class="hero-meta" id="hero-meta"></div>
+    </div>
+  </section>
+
+  <!-- CONTEXT -->
+  <section class="sec" id="s-context">
+    <div class="sec-label"><span class="exhibit">Exhibit 01 —</span>The Inflection Point</div>
+    <h2 class="sec-head" id="ctx-head"></h2>
+    <div class="sec-body" id="ctx-body"></div>
+    <div class="stat-row" id="stat-row"></div>
+    <div class="insight-box" id="ctx-insight" style="display:none;">
+      <p id="ctx-insight-txt"></p>
+      <cite id="ctx-insight-src"></cite>
+    </div>
+  </section>
+  <div class="rule"></div>
+
+  <!-- IMPERATIVE -->
+  <section class="sec" id="s-imperative">
+    <div class="sec-label"><span class="exhibit">Exhibit 02 —</span>The Strategic Imperative</div>
+    <h2 class="sec-head" id="imp-head"></h2>
+    <div class="sec-body" id="imp-body"></div>
+    <div class="exhibit-label" id="ff-label"></div>
+    <div class="force-field" id="force-field"></div>
+  </section>
+  <div class="rule"></div>
+
+  <!-- LANDSCAPE -->
+  <section class="sec" id="s-landscape">
+    <div class="sec-label"><span class="exhibit">Exhibit 03 —</span>Market Landscape</div>
+    <h2 class="sec-head" id="land-head"></h2>
+    <div class="sec-body" id="land-body"></div>
+    <div class="exhibit-label" id="chart-label"></div>
+    <div class="chart-wrap" id="chart-wrap"></div>
+  </section>
+  <div class="rule"></div>
+
+  <!-- PROFILE -->
+  <section class="sec" id="s-profile">
+    <div class="sec-label"><span class="exhibit">Exhibit 04 —</span>The Talent Paradox</div>
+    <h2 class="sec-head" id="prof-head"></h2>
+    <div class="sec-body" id="prof-body"></div>
+    <div class="exhibit-label" id="radar-label"></div>
+    <div id="radar-wrap"></div>
+  </section>
+  <div class="rule"></div>
+
+  <!-- RISK -->
+  <section class="sec" id="s-risk">
+    <div class="sec-label"><span class="exhibit">Exhibit 05 —</span>Failure Modes</div>
+    <h2 class="sec-head" id="risk-head"></h2>
+    <div class="sec-body" id="risk-body"></div>
+    <div class="risk-matrix" id="risk-matrix"></div>
+  </section>
+  <div class="rule"></div>
+
+  <!-- PROCESS -->
+  <section class="sec" id="s-process">
+    <div class="sec-label"><span class="exhibit">Exhibit 06 —</span>Search Process</div>
+    <h2 class="sec-head" id="proc-head"></h2>
+    <div class="sec-body" id="proc-body"></div>
+    <div class="exhibit-label" id="tl-label"></div>
+    <div class="tl-wrap" id="tl-wrap"></div>
+    <div style="margin-top:2rem;">
+      <div class="sec-label" style="margin-bottom:1rem;">Initial Candidate Landscape</div>
+      <div class="cand-grid" id="cand-grid"></div>
+    </div>
+  </section>
+
+  <!-- CLOSE -->
+  <section id="s-close" class="sec" style="padding:0;opacity:1;transform:none;">
+    <div class="cta-block">
+      <div>
+        <div class="cta-lbl">Start the Conversation</div>
+        <div class="cta-name" id="cta-name">Meridian 16</div>
+        <div class="cta-line" id="cta-role">Executive Search Intelligence</div>
+        <div class="cta-line" id="cta-email"></div>
+        <a class="cta-btn" id="cta-link" href="#">Request a Proposal</a>
+      </div>
+      <div style="text-align:right;">
+        <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-bottom:.75rem;">
+          <div class="nav-logo-mark" style="width:22px;height:22px;background:rgba(255,255,255,.25);">
+            <svg viewBox="0 0 14 14" fill="none" style="width:11px;height:11px;"><path d="M7 1L13 7L7 13L1 7L7 1Z" fill="white" opacity="0.9"/></svg>
+          </div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,.8);">MERIDIAN16</div>
+        </div>
+        <p class="cta-quote" id="cta-quote"></p>
+      </div>
+    </div>
+    <div class="s-footer">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="nav-logo-mark" style="width:16px;height:16px;">
+          <svg viewBox="0 0 14 14" fill="none" style="width:8px;height:8px;"><path d="M7 1L13 7L7 13L1 7L7 1Z" fill="white" opacity="0.9"/></svg>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--white);">MERIDIAN16</div>
+      </div>
+      <div class="s-footer-conf" id="footer-conf">Confidential. Prepared exclusively for [Client]. Not for distribution. © 2025 Meridian 16.</div>
+      <div class="s-footer-tag">Intelligence. Delivered.</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+let uploadedFileData = null;
+let linkCount = 0;
+let contactName = '';
+let contactEmail = '';
+
+function addLink() {
+  var c = document.getElementById('links-container');
+  var e = document.getElementById('links-empty');
+  if (e) e.style.display = 'none';
+  linkCount++;
+  var id = linkCount;
+  var row = document.createElement('div');
+  row.className = 'link-row';
+  row.id = 'lr-' + id;
+  row.innerHTML =
+    '<select class="link-type"><option value="press">Press</option><option value="linkedin">LinkedIn</option><option value="company">Company</option><option value="report">Report</option><option value="source">Source</option></select>' +
+    '<input type="url" class="link-input" placeholder="https://..." style="width:100%;">' +
+    '<input type="text" class="link-note" placeholder="Note (optional)" style="width:100%;">' +
+    '<button class="link-del" onclick="removeLink(' + id + ')">×</button>';
+  c.appendChild(row);
+}
+function removeLink(id) {
+  var r = document.getElementById('lr-' + id);
+  if (r) r.remove();
+  var c = document.getElementById('links-container');
+  var e = document.getElementById('links-empty');
+  if (e && c.children.length === 0) e.style.display = 'block';
+}
+
+function handleDragOver(ev) { ev.preventDefault(); document.getElementById('upload-zone').classList.add('drag'); }
+function handleDrop(ev) {
+  ev.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag');
+  var f = ev.dataTransfer.files[0];
+  if (f) processFile(f);
+}
+function handleFileSelect(ev) { var f = ev.target.files[0]; if (f) processFile(f); }
+function processFile(file) {
+  document.getElementById('up-icon').textContent = '✓';
+  document.getElementById('up-icon').style.color = 'var(--lime)';
+  document.getElementById('up-txt').innerHTML = '<strong style="color:var(--lime)">Attached:</strong> ' + file.name + '<br><span style="font-size:11px;color:var(--silver);">Click to replace</span>';
+  var reader = new FileReader();
+  if (file.type === 'application/pdf') {
+    reader.onload = function(e) { uploadedFileData = { type: 'pdf', data: e.target.result.split(',')[1] }; };
+    reader.readAsDataURL(file);
+  } else {
+    reader.onload = function(e) { uploadedFileData = { type: 'text', data: e.target.result }; };
+    reader.readAsText(file);
+  }
+}
+
+function setProgress(pct, status) {
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('l-status').textContent = status;
+}
+
+async function generateSite() {
+  var briefText = document.getElementById('brief-text').value.trim();
+  contactName = document.getElementById('contact-name').value.trim() || 'Meridian 16';
+  contactEmail = document.getElementById('contact-email').value.trim() || 'hello@meridian16.org';
+
+  var briefContent = briefText;
+  if (!briefText && !uploadedFileData) { showErr('Please add a brief (text or file) before generating.'); return; }
+  if (!briefContent && uploadedFileData && uploadedFileData.type === 'text') briefContent = uploadedFileData.data;
+  if (!briefContent) briefContent = '';
+
+  var linkEls = document.querySelectorAll('.link-input');
+  var linkTypeEls = document.querySelectorAll('.link-type');
+  var linkNoteEls = document.querySelectorAll('.link-note');
+  var links = [];
+  linkEls.forEach(function(el, i) {
+    var url = el.value.trim();
+    if (url) links.push({ url: url, type: linkTypeEls[i] ? linkTypeEls[i].value : 'source', note: linkNoteEls[i] ? linkNoteEls[i].value.trim() : '' });
+  });
+
+  hideErr();
+  document.getElementById('input-screen').style.display = 'none';
+  document.getElementById('loading-screen').style.display = 'flex';
+
+  var steps = [
+    [12,'Parsing mandate...'],
+    [25,'Mapping market landscape...'],
+    [38,'Identifying strategic pressure...'],
+    [52,'Building competency model...'],
+    [65,'Constructing risk analysis...'],
+    [78,'Drafting proposal...'],
+    [90,'Synthesising process...'],
+    [97,'Rendering...']
+  ];
+  var si = 0;
+  var iv = setInterval(function() { if (si < steps.length) { setProgress(steps[si][0], steps[si][1]); si++; } }, 1400);
+
+  try {
+    var sys = 'You are a senior consultant at Meridian 16, an executive search intelligence firm. You produce client-ready search proposals — precise, insight-dense, with the analytical rigour of McKinsey and the commercial directness of a retained search partner.\n\nWriting standard: every sentence earns its place. Insight precedes assertion. Specificity over generality.\n\nBanned: em dashes, "delve", "it\'s worth noting", "game-changer", "unlock", "leverage" (verb), "transformative", "cutting-edge", "harness", "navigating", "robust", "seamless", "unprecedented", "pivotal", "mission-critical", "in today\'s landscape".\n\nNo sentence under 8 words as a standalone paragraph. No passive voice where active is possible.\n\nReturn ONLY valid JSON. No markdown, no preamble.';
+
+    var linksSection = links.length > 0
+      ? '\n\nFEATURED LINKS — treat as source material. Reference press, pull facts from URLs, cite reports by name:\n' +
+        links.map(function(l) { return '- [' + l.type.toUpperCase() + '] ' + l.url + (l.note ? ' (' + l.note + ')' : ''); }).join('\n')
+      : '';
+
+    var prompt = 'Generate a complete intelligence-grade Meridian 16 executive search proposal from this mandate. Where facts are not provided, synthesise expert judgment — flag synthesised data with "(est.)" in stat labels.\n\nMANDATE:\n' + briefContent + linksSection + '\n\nReturn this JSON (all fields required):\n\n{\n  "company": "Company name",\n  "role": "Role title",\n  "hero_title": "THE [COMPANY] [ROLE] APPOINTMENT: [SHARP IMPLICATION]. All caps. Max 12 words. Specific — not generic.",\n  "hero_sub": "One sentence: what this proposal covers and who prepared it.",\n  "hero_meta": [\n    {"label": "Industry", "value": "..."},\n    {"label": "Revenue / Scale", "value": "..."},\n    {"label": "Mandate Type", "value": "Retained Executive Search"},\n    {"label": "Prepared By", "value": "Meridian 16"}\n  ],\n  "stats": [\n    {"num": "...", "label": "...", "ctx": "what this means for the search"},\n    {"num": "...", "label": "...", "ctx": "..."},\n    {"num": "...", "label": "...", "ctx": "..."},\n    {"num": "...", "label": "...", "ctx": "..."}\n  ],\n  "ctx_head": "WHAT CHANGED, AND WHEN (all caps, max 8 words, specific)",\n  "ctx_body": "3-4 sentences. Company at scale, recent inflection point, what specifically changed. This company, this moment.",\n  "ctx_insight": "One sharp sentence a board member would quote. A specific implication, not a platitude.",\n  "ctx_insight_src": "Source framing — e.g. \'Meridian 16 Analysis\' or \'Company 10-K, FY2024\'",\n  "imp_head": "THE COST OF INACTION (all caps, max 8 words)",\n  "imp_body": "2-3 sentences: specific consequences of delay or wrong hire. Quantify where possible.",\n  "forces": {\n    "push_head": "Why This Must Happen Now",\n    "push_items": [\n      {"text": "Specific pressure point with a data point or named competitor"},\n      {"text": "Specific pressure point"},\n      {"text": "Specific pressure point"}\n    ],\n    "pull_head": "What Makes This Hard",\n    "pull_items": [\n      {"text": "Specific constraint with a number or named tension"},\n      {"text": "Specific constraint"},\n      {"text": "Specific constraint"}\n    ]\n  },\n  "land_head": "WHERE THE TALENT ACTUALLY SITS",\n  "land_body": "2-3 sentences on which sectors hold qualified candidates, which obvious pools are wrong, and why.",\n  "chart_title": "CANDIDATE POOL RELEVANCE BY SECTOR — Meridian 16 Assessment",\n  "market_bars": [\n    {"label": "Sector or talent pool", "value": 85, "note": "Why relevant"},\n    {"label": "...", "value": 65, "note": "..."},\n    {"label": "...", "value": 48, "note": "..."},\n    {"label": "...", "value": 32, "note": "..."},\n    {"label": "...", "value": 20, "note": "..."}\n  ],\n  "prof_head": "THE THREE THINGS THAT MUST ALL BE TRUE",\n  "prof_body": "2-3 sentences: the specific combination of attributes that does not exist at volume in the market.",\n  "radar_note": "One sentence explaining the gap between ideal and typical — what it means for sourcing strategy.",\n  "radar_axes": [\n    {"label": "Competency 1", "ideal": 90, "typical": 50},\n    {"label": "Competency 2", "ideal": 80, "typical": 65},\n    {"label": "Competency 3", "ideal": 95, "typical": 40},\n    {"label": "Competency 4", "ideal": 75, "typical": 60},\n    {"label": "Competency 5", "ideal": 85, "typical": 55}\n  ],\n  "risk_head": "WHAT GOES WRONG, AND HOW TO PREVENT IT",\n  "risk_body": "1-2 sentences: why wrong hires happen in this category specifically.",\n  "wrong_archetypes": [\n    {\n      "name": "Archetype name",\n      "why_attractive": "Why they look right on paper",\n      "why_wrong": "The specific failure mode in this role",\n      "signals": ["Resume signal", "Interview signal", "Reference signal"]\n    },\n    {\n      "name": "Second archetype",\n      "why_attractive": "...",\n      "why_wrong": "...",\n      "signals": ["...", "...", "..."]\n    }\n  ],\n  "right_archetype": {\n    "name": "The profile that works",\n    "description": "2-3 sentences: what the right person actually looks like. Specific.",\n    "signals": ["What they have actually done", "How they think", "How they lead"]\n  },\n  "proc_head": "FROM MANDATE TO PLACEMENT IN TEN WEEKS",\n  "proc_body": "1-2 sentences: what is non-standard about this process for this search.",\n  "phases": [\n    {"name": "Deep Brief", "week": "Week 1", "desc": "What the brief phase must uncover for this specific search."},\n    {"name": "Market Map", "week": "Weeks 1-2", "desc": "Which sectors and firms Meridian 16 maps first, and why."},\n    {"name": "Assessment", "week": "Weeks 2-4", "desc": "Which competencies are tested and how, specific to this role."},\n    {"name": "Shortlist", "week": "Week 5", "desc": "What a calibrated slate looks like for this mandate."},\n    {"name": "Close", "week": "Weeks 6-10", "desc": "Risk points in offer and onboarding specific to this profile."}\n  ],\n  "candidates": [\n    {"initial": "A", "archetype": "Archetype label", "why": "Why this profile is worth pursuing. Include sector or company type.", "tension": "The one thing to probe.", "tags": ["Tag1", "Tag2", "Tag3"]},\n    {"initial": "B", "archetype": "...", "why": "...", "tension": "...", "tags": ["...", "..."]},\n    {"initial": "C", "archetype": "...", "why": "...", "tension": "...", "tags": ["...", "..."]},\n    {"initial": "D", "archetype": "...", "why": "...", "tension": "...", "tags": ["...", "..."]},\n    {"initial": "E", "archetype": "...", "why": "...", "tension": "...", "tags": ["...", "..."]}\n  ],\n  "close_quote": "One sentence. The precise cost of getting this wrong — specific to this company and role.",\n  "footer_conf": "Confidential. Prepared exclusively for [Company]. Not for distribution. \u00a9 2025 Meridian 16."\n}';
+
+    var msgContent;
+    if (uploadedFileData && uploadedFileData.type === 'pdf') {
+      msgContent = [
+        { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: uploadedFileData.data } },
+        { type: 'text', text: prompt }
+      ];
+    } else {
+      msgContent = prompt;
+    }
+
+    var resp = await fetch('https://caldwell-brief-proxy.caldwellbriefs.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 6000,
+        system: sys,
+        messages: [{ role: 'user', content: msgContent }]
+      })
+    });
+
+    var data = await resp.json();
+    if (!resp.ok || data.error) throw new Error(data.error && data.error.message ? data.error.message : 'API error');
+
+    clearInterval(iv);
+    setProgress(100, 'Rendering...');
+
+    var raw = '';
+    for (var b of data.content) { if (b.type === 'text') raw += b.text; }
+    var clean = raw.replace(/```json|```/g, '').trim();
+    var d;
+    try { d = JSON.parse(clean); }
+    catch(e) { var m = clean.match(/\{[\s\S]*\}/); if (m) d = JSON.parse(m[0]); else throw new Error('JSON parse failed'); }
+
+    await new Promise(function(r){ setTimeout(r, 300); });
+    renderSite(d);
+
+  } catch(err) {
+    clearInterval(iv);
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('input-screen').style.display = 'flex';
+    showErr('Generation failed: ' + err.message);
+  }
+}
+
+function renderSite(d) {
+  document.getElementById('hero-title').innerHTML = esc(d.hero_title || 'Executive Search Proposal');
+  setText('hero-sub', d.hero_sub);
+  document.getElementById('hero-meta').innerHTML = (d.hero_meta || []).map(function(m) {
+    return '<div class="meta-item"><div class="meta-lbl">' + esc(m.label) + '</div><div class="meta-val">' + esc(m.value) + '</div></div>';
+  }).join('');
+
+  document.getElementById('stat-row').innerHTML = (d.stats || []).map(function(s) {
+    return '<div class="stat-block"><div class="stat-num">' + esc(s.num) + '</div><div class="stat-lbl">' + esc(s.label) + '</div>' +
+      (s.ctx ? '<div class="stat-ctx">' + esc(s.ctx) + '</div>' : '') + '</div>';
+  }).join('');
+
+  setText('ctx-head', d.ctx_head);
+  setHTML('ctx-body', d.ctx_body);
+  if (d.ctx_insight) {
+    document.getElementById('ctx-insight').style.display = 'block';
+    setText('ctx-insight-txt', d.ctx_insight);
+    setText('ctx-insight-src', d.ctx_insight_src || 'Meridian 16 Analysis');
+  }
+
+  setText('imp-head', d.imp_head);
+  setHTML('imp-body', d.imp_body);
+  setText('ff-label', 'Force-Field Analysis — ' + (d.company || 'This Mandate'));
+  if (d.forces) {
+    document.getElementById('force-field').innerHTML =
+      '<div class="force-col"><div class="force-head push">' + esc(d.forces.push_head) + '</div>' +
+      (d.forces.push_items || []).map(function(i) { return '<div class="force-item"><div class="fdot push"></div><div>' + esc(i.text) + '</div></div>'; }).join('') +
+      '</div><div class="force-col"><div class="force-head pull">' + esc(d.forces.pull_head) + '</div>' +
+      (d.forces.pull_items || []).map(function(i) { return '<div class="force-item"><div class="fdot pull"></div><div>' + esc(i.text) + '</div></div>'; }).join('') +
+      '</div>';
+  }
+
+  setText('land-head', d.land_head);
+  setHTML('land-body', d.land_body);
+  setText('chart-label', d.chart_title || 'Candidate Pool Relevance');
+  if (d.market_bars && d.market_bars.length) {
+    document.getElementById('chart-wrap').innerHTML = buildBarChart(d.market_bars);
+  }
+
+  setText('prof-head', d.prof_head);
+  setHTML('prof-body', d.prof_body);
+  setText('radar-label', 'Competency Gap Analysis — Ideal Profile vs. Typical Senior Candidate');
+  if (d.radar_axes && d.radar_axes.length) {
+    document.getElementById('radar-wrap').innerHTML = buildRadar(d.radar_axes, d.radar_note);
+  }
+
+  setText('risk-head', d.risk_head);
+  setHTML('risk-body', d.risk_body);
+  var rm = '';
+  (d.wrong_archetypes || []).forEach(function(a) {
+    rm += '<div class="risk-card wrong"><span class="risk-tag wrong">Wrong Hire</span><div class="risk-name">' + esc(a.name) + '</div>' +
+      '<div class="risk-desc"><strong>Looks right because:</strong> ' + esc(a.why_attractive) + '</div>' +
+      '<div class="risk-desc" style="margin-top:.4rem;"><strong>Fails because:</strong> ' + esc(a.why_wrong) + '</div>' +
+      (a.signals ? '<div class="risk-sigs"><div class="risk-sigs-lbl">Detection Signals</div>' + a.signals.map(function(s){ return '<div class="risk-sig">— ' + esc(s) + '</div>'; }).join('') + '</div>' : '') +
+      '</div>';
+  });
+  if (d.right_archetype) {
+    rm += '<div class="risk-card right"><span class="risk-tag right">Right Hire</span><div class="risk-name">' + esc(d.right_archetype.name) + '</div>' +
+      '<div class="risk-desc">' + esc(d.right_archetype.description) + '</div>' +
+      (d.right_archetype.signals ? '<div class="risk-sigs"><div class="risk-sigs-lbl">Positive Signals</div>' + d.right_archetype.signals.map(function(s){ return '<div class="risk-sig">+ ' + esc(s) + '</div>'; }).join('') + '</div>' : '') +
+      '</div>';
+  }
+  document.getElementById('risk-matrix').innerHTML = rm;
+
+  setText('proc-head', d.proc_head);
+  setHTML('proc-body', d.proc_body);
+  setText('tl-label', 'Three-Hour Delivery Process — ' + (d.role || 'Search') + ' at ' + (d.company || ''));
+  document.getElementById('tl-wrap').innerHTML = buildTimeline(d.phases || []);
+  document.getElementById('cand-grid').innerHTML = (d.candidates || []).map(function(c) {
+    return '<div class="cand-card"><div class="cand-init">' + esc(c.initial) + '</div>' +
+      '<div class="cand-type">' + esc(c.archetype) + '</div>' +
+      '<div class="cand-why">' + esc(c.why) + '</div>' +
+      (c.tension ? '<div class="cand-why" style="margin-top:.35rem;"><strong>Probe:</strong> ' + esc(c.tension) + '</div>' : '') +
+      '<div style="margin-top:.5rem;">' + (c.tags || []).map(function(t){ return '<span class="tag">' + esc(t) + '</span>'; }).join('') + '</div>' +
+      '</div>';
+  }).join('');
+
+  var name = contactName || 'Meridian 16';
+  var email = contactEmail || 'hello@meridian16.org';
+  setText('cta-name', name);
+  setText('cta-email', email);
+  setText('cta-quote', d.close_quote || '');
+  setText('footer-conf', d.footer_conf || 'Confidential. Prepared exclusively for ' + (d.company || '[Client]') + '. Not for distribution. \u00a9 2025 Meridian 16.');
+  var subj = encodeURIComponent((d.company || '') + ' ' + (d.role || '') + ' — Meridian 16 Proposal');
+  document.getElementById('cta-link').href = 'mailto:' + email + '?subject=' + subj;
+  document.getElementById('nav-cta').onclick = function() { window.location.href = 'mailto:' + email + '?subject=' + subj; };
+
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('site-screen').style.display = 'block';
+  window.scrollTo(0, 0);
+  initScroll();
+}
+
+function buildBarChart(bars) {
+  var maxV = Math.max.apply(null, bars.map(function(b){ return b.value; }));
+  var rowH = 44, labelW = 155, barMaxW = 360;
+  var h = bars.length * rowH + 20;
+  var svg = '<svg viewBox="0 0 ' + (labelW + barMaxW + 80) + ' ' + h + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">';
+  bars.forEach(function(b, i) {
+    var y = i * rowH + 8;
+    var bw = Math.round((b.value / maxV) * barMaxW);
+    var fill = i === 0 ? '#0F52BA' : (bw > barMaxW * 0.55 ? '#4B7FD4' : '#A8C0EC');
+    svg += '<text x="' + (labelW - 8) + '" y="' + (y + 15) + '" text-anchor="end" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="700" fill="#2E3D52">' + esc(b.label) + '</text>';
+    svg += '<rect x="' + labelW + '" y="' + y + '" width="' + bw + '" height="20" fill="' + fill + '"/>';
+    svg += '<text x="' + (labelW + bw + 5) + '" y="' + (y + 14) + '" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="700" fill="#0F52BA">' + b.value + '</text>';
+    if (b.note) svg += '<text x="' + labelW + '" y="' + (y + 33) + '" font-family="Barlow,sans-serif" font-size="9" fill="#6B7A8D">' + esc(b.note) + '</text>';
+  });
+  svg += '</svg>';
+  return svg;
+}
+
+function buildRadar(axes, note) {
+  var cx = 150, cy = 150, r = 110, n = axes.length;
+  function pt(val, idx) {
+    var angle = (Math.PI * 2 * idx / n) - Math.PI / 2;
+    var d = (val / 100) * r;
+    return { x: cx + d * Math.cos(angle), y: cy + d * Math.sin(angle) };
+  }
+  var svg = '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;flex-shrink:0;">';
+  [25,50,75,100].forEach(function(ring) {
+    var pts = axes.map(function(_, i){ return pt(ring, i); });
+    svg += '<polygon points="' + pts.map(function(p){ return p.x + ',' + p.y; }).join(' ') + '" fill="none" stroke="#E2E7EF" stroke-width="1"/>';
+  });
+  axes.forEach(function(_, i){ var p = pt(100, i); svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p.x + '" y2="' + p.y + '" stroke="#E2E7EF" stroke-width="1"/>'; });
+  var tPts = axes.map(function(a, i){ return pt(a.typical, i); });
+  svg += '<polygon points="' + tPts.map(function(p){ return p.x + ',' + p.y; }).join(' ') + '" fill="rgba(107,122,141,.12)" stroke="#6B7A8D" stroke-width="1.5"/>';
+  var iPts = axes.map(function(a, i){ return pt(a.ideal, i); });
+  svg += '<polygon points="' + iPts.map(function(p){ return p.x + ',' + p.y; }).join(' ') + '" fill="rgba(15,82,186,.1)" stroke="#0F52BA" stroke-width="2"/>';
+  axes.forEach(function(a, i) {
+    var lp = pt(118, i);
+    svg += '<text x="' + lp.x + '" y="' + lp.y + '" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" fill="#2E3D52">' + esc(a.label) + '</text>';
+  });
+  svg += '</svg>';
+  var legend = '<div class="radar-legend">' +
+    '<div class="leg-item"><div class="leg-dot" style="background:#0F52BA;"></div><div><strong style="color:#1C2535;">Ideal Profile</strong><br>What this mandate demands</div></div>' +
+    '<div class="leg-item"><div class="leg-dot" style="background:#6B7A8D;"></div><div><strong style="color:#1C2535;">Typical Senior Candidate</strong><br>Market baseline</div></div>' +
+    (note ? '<div style="margin-top:.65rem;font-size:11px;color:#3C4E64;line-height:1.55;border-left:2px solid #0F52BA;padding-left:.65rem;">' + esc(note) + '</div>' : '') +
+    '</div>';
+  return '<div class="radar-wrap">' + svg + legend + '</div>';
+}
+
+function buildTimeline(phases) {
+  var nodes = phases.map(function(p, i) {
+    return '<div class="tl-phase"><div class="tl-node" id="tn-' + i + '"></div>' +
+      '<div class="tl-name">' + esc(p.name) + '</div>' +
+      '<div class="tl-wk">' + esc(p.week) + '</div>' +
+      '<div class="tl-desc">' + esc(p.desc) + '</div></div>';
+  }).join('');
+  return '<div class="tl-track" id="tl-track"><div class="tl-line"></div><div class="tl-prog" id="tl-prog"></div>' + nodes + '</div>';
+}
+
+function initScroll() {
+  var secs = document.querySelectorAll('.sec');
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('vis');
+        if (e.target.id === 's-process') setTimeout(animateTL, 300);
+      }
+    });
+  }, { threshold: 0.08 });
+  secs.forEach(function(s){ obs.observe(s); });
+
+  var navIds = ['s-context','s-imperative','s-landscape','s-profile','s-risk','s-process'];
+  window.addEventListener('scroll', function() {
+    var pct = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('nav-prog').style.width = (pct > 0 ? (window.scrollY / pct) * 100 : 0) + '%';
+    var active = '';
+    navIds.forEach(function(id) { var el = document.getElementById(id); if (el && el.getBoundingClientRect().top < 110) active = id; });
+    document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.toggle('on', l.getAttribute('href') === '#' + active); });
+  });
+}
+
+function animateTL() {
+  var prog = document.getElementById('tl-prog');
+  var track = document.getElementById('tl-track');
+  if (!prog || !track) return;
+  prog.style.width = '100%';
+  track.querySelectorAll('.tl-node').forEach(function(n, i){ setTimeout(function(){ n.classList.add('on'); }, i * 150); });
+}
+
+function backToInput() {
+  document.getElementById('site-screen').style.display = 'none';
+  document.getElementById('input-screen').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+function toggleMob() { document.getElementById('mob-menu').classList.toggle('open'); }
+function closeMob() { document.getElementById('mob-menu').classList.remove('open'); }
+function setText(id, val) { var el = document.getElementById(id); if (el && val) el.textContent = val; }
+function setHTML(id, val) { var el = document.getElementById(id); if (el && val) el.innerHTML = esc(val).replace(/\n/g,'<br>'); }
+function esc(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function showErr(msg) { var e = document.getElementById('err-msg'); e.textContent = msg; e.style.display = 'block'; }
+function hideErr() { document.getElementById('err-msg').style.display = 'none'; }
+</script>
+</body>
+</html>
