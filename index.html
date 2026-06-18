@@ -1152,7 +1152,18 @@ function back(){document.getElementById('proposal').style.display='none';documen
 function toggleMob(){document.getElementById('mob-nav').classList.toggle('open');}
 function closeMob(){document.getElementById('mob-nav').classList.remove('open');}
 function se(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
-function seH(id,val){var el=document.getElementById(id);if(el)el.innerHTML=esc(val).replace(/\n/g,'<br>');}
+function seH(id,val){
+  var el=document.getElementById(id);
+  if(!el||!val)return;
+  // Escape HTML then linkify URLs, then restore newlines
+  var escaped=esc(val);
+  var linked=escaped.replace(/(https?:\/\/[^\s&,;)<>"]+)/g,function(url){
+    // un-escape the URL for the href, keep display text as-is
+    var href=url.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"');
+    return'<a href="'+href+'" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline;text-underline-offset:2px;">'+url+'</a>';
+  });
+  el.innerHTML=linked.replace(/\n/g,'<br>');
+}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function showErr(m){var e=document.getElementById('err');if(e){e.textContent=m;e.style.display='block';}}
 function hideErr(){var e=document.getElementById('err');if(e)e.style.display='none';}
